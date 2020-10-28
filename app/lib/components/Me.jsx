@@ -110,12 +110,12 @@ class Me extends React.Component
 							}}
 						/>
 
-						<div
+						{/* <div
 							className={classnames('button', 'change-webcam', changeWebcamState, {
 								disabled : me.webcamInProgress || me.shareInProgress
 							})}
 							onClick={() => roomClient.changeWebcam()}
-						/>
+						/> */}
 
 						<div
 							className={classnames('button', 'share', shareState, {

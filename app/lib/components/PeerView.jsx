@@ -98,8 +98,8 @@ export default class PeerView extends React.Component
 
 		return (
 			<div data-component='PeerView'>
-				<div className='info'>
-					<div className='icons'>
+				 <div className='info'>
+				{/*<div className='icons'>
 						<div
 							className={classnames('icon', 'info', { on: showInfo })}
 							onClick={() => this.setState({ showInfo: !showInfo })}
@@ -109,9 +109,9 @@ export default class PeerView extends React.Component
 							className={classnames('icon', 'stats')}
 							onClick={() => onStatsClick(peer.id)}
 						/>
-					</div>
+					</div> */}
 
-					<div className={classnames('box', { visible: showInfo })}>
+					<div className={classnames('box')}>
 						<If condition={audioProducerId || audioConsumerId}>
 							<h1>audio</h1>
 
@@ -423,14 +423,14 @@ export default class PeerView extends React.Component
 							</Otherwise>
 						</Choose>
 
-						<div className='row'>
+						{/* <div className='row'>
 							<span
 								className={classnames('device-icon', peer.device.flag)}
 							/>
 							<span className='device-version'>
 								{peer.device.name} {peer.device.version || null}
 							</span>
-						</div>
+						</div> */}
 					</div>
 				</div>
 

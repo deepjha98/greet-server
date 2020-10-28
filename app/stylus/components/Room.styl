@@ -5,6 +5,31 @@
 
 	AppearFadeIn(300ms);
 
+	> .heading-name {
+		position: fixed;
+		z-index: 100;
+		display: flex;
+		flex-direction: row;
+			user-select: none;
+			pointer-events: none;
+			text-align: center;
+			font-family: 'Roboto';
+			font-weight: 400;
+			color: #ffffff;		
+
+		+desktop() {
+			top: 23px;
+			left: 20px;
+			width: 124px;
+		}
+
+		+mobile() {
+			top: 12px;
+			left: 10px;
+			width: 110px;
+		}
+	}
+
 	> .state {
 		position: fixed;
 		z-index: 100;
@@ -17,13 +42,13 @@
 
 		+desktop() {
 			top: 20px;
-			left: 20px;
+			right: 20px;
 			width: 124px;
 		}
 
 		+mobile() {
 			top: 10px;
-			left: 10px;
+			right: 10px;
 			width: 110px;
 		}
 
@@ -150,11 +175,12 @@
 		}
 
 		+desktop() {
-			height: 250px;
-			width: 294px;
+			height: 230px;
+			width: 335px;
 			bottom: 60px;
 			left: 20px;
 			border: 1px solid rgba(#fff, 0.15);
+			border-radius: 11px;
 		}
 
 		+mobile() {

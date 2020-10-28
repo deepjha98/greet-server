@@ -11,7 +11,7 @@ import { Appear } from './transitions';
 import Me from './Me';
 import ChatInput from './ChatInput';
 import Peers from './Peers';
-import Stats from './Stats';
+// import Stats from './Stats';
 import Notifications from './Notifications';
 import NetworkThrottle from './NetworkThrottle';
 
@@ -31,7 +31,11 @@ class Room extends React.Component
 			<Appear duration={300}>
 				<div data-component='Room'>
 					<Notifications />
-
+					
+					<div className='heading-name'>
+					<p>Precisely Greet</p>
+					</div>
+						
 					<div className='state'>
 						<div className={classnames('icon', room.state)} />
 						<p className={classnames('text', room.state)}>{room.state}</p>
@@ -119,7 +123,7 @@ class Room extends React.Component
 						/>
 					</div>
 
-					<Stats />
+					{/* <Stats /> */}
 
 					<If condition={window.NETWORK_THROTTLE_SECRET}>
 						<NetworkThrottle
