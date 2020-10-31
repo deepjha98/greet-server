@@ -8,6 +8,7 @@ import * as appPropTypes from './appPropTypes';
 import { withRoomContext } from '../RoomContext';
 import * as stateActions from '../redux/stateActions';
 import PeerView from './PeerView';
+import videoAction from "../utils/actionCall"
 
 class Me extends React.Component
 {
@@ -37,20 +38,27 @@ class Me extends React.Component
 			micState = 'unsupported';
 		else if (!audioProducer)
 			micState = 'unsupported';
-		else if (!audioProducer.paused)
+		else if (!audioProducer.paused) {
 			micState = 'on';
-		else
+			videoAction("mic", 1);
+		}
+		else {
 			micState = 'off';
+			videoAction("mic", 0);
+		}
 
 		let webcamState;
 
 		if (!me.canSendWebcam)
 			webcamState = 'unsupported';
-		else if (videoProducer && videoProducer.type !== 'share')
+		else if (videoProducer && videoProducer.type !== 'share') {
 			webcamState = 'on';
-		else
+			videoAction("video", 1);
+		}
+		else {
 			webcamState = 'off';
-
+			videoAction("video", 0);
+		}
 		let changeWebcamState;
 
 		if (Boolean(videoProducer) && videoProducer.type !== 'share' && me.canChangeWebcam)
@@ -60,11 +68,14 @@ class Me extends React.Component
 
 		let shareState;
 
-		if (Boolean(videoProducer) && videoProducer.type === 'share')
+		if (Boolean(videoProducer) && videoProducer.type === 'share') {
 			shareState = 'on';
-		else
+			videoAction("screenshare", 1);
+		}
+		else {
+			videoAction("screenshare", 0);
 			shareState = 'off';
-
+		}
 		const videoVisible = Boolean(videoProducer) && !videoProducer.paused;
 
 		let tip;
