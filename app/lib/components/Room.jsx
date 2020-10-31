@@ -71,6 +71,22 @@ class Room extends React.Component
 							</a>
 						</div>
 					</div>
+					
+					<div className='room-close-wrapper'>
+						<div className='room-close-button'>
+							<a
+								className='link'
+								onClick={(event) =>
+								{
+									roomClient.close();
+									window.open("about:blank", "_self");
+									window.close();
+								}}
+							>
+								End Call
+							</a>
+						</div>
+					</div>
 
 					<Peers />
 
