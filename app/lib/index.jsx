@@ -3,6 +3,7 @@ import UrlParse from 'url-parse';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import videoAction from "./utils/actionCall"
 import {
 	applyMiddleware as applyReduxMiddleware,
 	createStore as createReduxStore
@@ -24,7 +25,7 @@ import Room from './components/Room';
 
 const logger = new Logger();
 const reduxMiddlewares = [ thunk ];
-
+	
 // if (process.env.NODE_ENV === 'development')
 // {
 // 	const reduxLogger = createReduxLogger(
@@ -65,6 +66,14 @@ async function run()
 	const urlParser = new UrlParse(window.location.href, true);
 	const peerId = randomString({ length: 8 }).toLowerCase();
 	let roomId = urlParser.query.roomId;
+	if(urlParser.query.token){
+		console.log("Token", urlParser.query.token);
+		localStorage.setItem("auth-token", urlParser.query.token);
+		localStorage.setItem("roomId", urlParser.query.roomId);
+		window.location.href =`https://video.precisely.one/?roomId=${urlParser.query.roomId}`;
+	}else{
+		videoAction("connected", true);
+	}
 	let displayName =
 		urlParser.query.displayName || (cookiesManager.getUser() || {}).displayName;
 	const handler = urlParser.query.handler;

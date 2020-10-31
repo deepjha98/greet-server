@@ -33,7 +33,7 @@ class Room extends React.Component
 					<Notifications />
 					
 					<div className='heading-name'>
-					<p>Precisely Greet</p>
+					<p>Greet</p>
 					</div>
 						
 					<div className='state'>
@@ -67,7 +67,7 @@ class Room extends React.Component
 										.then(onRoomLinkCopy);
 								}}
 							>
-								invitation link
+								copy invitation link
 							</a>
 						</div>
 					</div>
