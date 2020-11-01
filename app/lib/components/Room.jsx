@@ -72,21 +72,28 @@ class Room extends React.Component
 						</div>
 					</div>
 					
+
 					<div className='room-close-wrapper'>
-						<div className='room-close-button'>
-							<a
-								className='link'
-								onClick={(event) =>
-								{
-									roomClient.close();
-									window.open("about:blank", "_self");
-									window.close();
-								}}
-							>
-								End Call
-							</a>
-						</div>
-					</div>
+                                                <div className='room-close-button'>
+                                                        <a
+                                                                className='close-button'
+                                                                onClick={(event) =>
+                                                                {
+                                                                        videoAction("connected", 0);
+                                                                        roomClient.close();
+                                                                        var strWindowFeatures = "location=yes,height=570,width=520,scrollbars=yes,status=yes";
+                                                                        var URL = "https://app.precisely.one";
+                                                                        var win = window.open(URL, "_self", strWindowFeatures);
+                                                                }}
+                                                        >
+
+                                                        <svg className='close-svg' >
+                                                                <rect className='close-rect' x="0" y="0" rx="25" fill="none" width="100%" height="100%"/>
+                                                        </svg>
+                                                                End Call
+                                                        </a>
+                                                </div>
+                                        </div>
 
 					<Peers />
 
