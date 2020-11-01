@@ -14,6 +14,7 @@ import Peers from './Peers';
 // import Stats from './Stats';
 import Notifications from './Notifications';
 import NetworkThrottle from './NetworkThrottle';
+import videoAction from "../utils/actionCall";
 
 class Room extends React.Component
 {
