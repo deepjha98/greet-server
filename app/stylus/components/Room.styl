@@ -160,6 +160,83 @@
 		}
 	}
 
+	> .room-close-wrapper {
+                pointer-events: none;
+                position: absolute;
+                z-index: 1;
+                top: 19px;
+                right: 279px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+
+                > .room-close-button {
+                        width: auto;
+                        box-shadow: 0px 3px 12px 2px rgba(#111, 0.4);
+
+                        > a.close-button {
+                                background: darken(#000000, 1.5%);
+                                font-weight: 200;
+                                cursor: pointer;
+                                font-size:16px;
+                                font-weight: 400;
+                                line-height: 10px;
+                                margin: 0 0 2em;
+                                color: #FFFFFF;
+                                max-width: 160px;
+                                position: relative;
+                                text-decoration: none;
+                                text-transform: uppercase;
+                                width: 100%;
+                                display: block;;
+                                user-select: none;
+                                pointer-events: auto;
+                                font-family: 'Roboto';
+
+                                > a.close-svg {
+                                        height: 45px;
+                                        left: 0;
+                                        position: absolute;
+                                        top: 0;
+                                        width: 100%;
+
+                                        > .close-rect {
+                                                fill: none;
+                                                stroke: #fff;
+                                                stroke-width: 2;
+                                                stroke-dasharray: 422, 0;
+                                                transition: all 0.35s linear;
+                                        }
+                                }
+
+                                +desktop() {
+                                        padding: 10px 20px;
+                                        font-size: 12px;
+                                }
+
+                                +mobile() {
+                                        padding: 6px 10px;
+                                        font-size: 10px;
+                                }
+
+                                &:hover {
+                                        color: #fff;
+                                        text-decoration: underline;
+                                }
+
+                                > svg {
+                                        height: 45px;
+                                        left: 0;
+                                        position: absolute;
+                                        top: 0;
+                                        width: 100%;
+                                }
+
+                        }
+                }
+        }
+
+
 	> .me-container {
 		position: fixed;
 		z-index: 100;
