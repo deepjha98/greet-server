@@ -70,9 +70,10 @@ async function run()
 		console.log("Token", urlParser.query.token);
 		localStorage.setItem("auth-token", urlParser.query.token);
 		localStorage.setItem("roomId", urlParser.query.roomId);
+		videoAction("connected", true);
 		window.location.href =`https://video.precisely.one/?roomId=${urlParser.query.roomId}`;
 	}else{
-		videoAction("connected", true);
+		localStorage.setItem("roomId", urlParser.query.roomId);
 	}
 	let displayName =
 		urlParser.query.displayName || (cookiesManager.getUser() || {}).displayName;

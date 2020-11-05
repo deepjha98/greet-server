@@ -16,26 +16,66 @@ import Notifications from './Notifications';
 import NetworkThrottle from './NetworkThrottle';
 import videoAction from "../utils/actionCall";
 import Popup from 'reactjs-popup';
+import axios from "axios";
 
 class Room extends React.Component
 {
 	constructor(props) {
-    super(props);
+		super(props);
+
     this.state = {
 			email: "",
 			name: "",
-			popup: true
+			popup: true,
+			token: localStorage.getItem('auth-token') || false,
+			emailError: false,
+			error: false,
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 	
-	handleSubmit(e) {
+	async handleSubmit(e) {
 		e.preventDefault();
-		console.log(this);
-		console.log('Email', this.state.email);
-		console.log('nAME', this.state.name);
-		this.setState({  popup: false })
+		if(this.state.email && this.state.name){
+			if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(this.state.email)){
+				console.log("Enter Valid Email")
+				this.setState({emailError: true});
+				setTimeout(() => this.setState({emailError: false}) , 3000)
+			}else{
+				try {
+					const { data } = await axios.post('https://precisely.one/api/v1/register_new_user_to_event',{
+						email: this.state.email,
+						name: this.state.name,
+						room_id: "sdfghj"
+					});
+					// console.log(data);
+					console.log(data.data);
+					localStorage.setItem("auth-token", data.data.access_token);
+					videoAction("connected", true);
+					this.setState({ popup: false })
+				} catch (error) {
+					console.log("error", error.response);
+				}
+				console.log('Email', this.state.email);
+				console.log('Name', this.state.name);
+			}
+		}else{
+			console.log("Enter Name and Email");
+			this.setState({error: true});
+			setTimeout(() => this.setState({error: false}) , 3000)
+		}
 	}
+
+	componentDidMount(){
+		console.log("Mount");
+		// console.log(localStorage.getItem('auth-token'))
+		// if(localStorage.getItem('auth-token')){
+		// 	console.log("In here")
+		// 	this.setState({  popup: false });
+		// }
+		// console.log("Componet did mount")
+	}
+
 
 	render()
 	{
@@ -49,29 +89,32 @@ class Room extends React.Component
 
 		return (
 			<Fragment>
-				{ this.state.popup && 
-				<Popup open={true} disabled={true}>
-        <div className="popup-modal">
-					<form onSubmit={this.handleSubmit}>
-						<div className="form">
-							<div className="form-group">
-								<label htmlFor="email">Enter Email</label>
-								<input type="email" placeholder="Email" value={this.state.email} 
-								onChange={(e) => this.setState({ email: e.target.value })}
-								/>
-							</div>
-							<div className="form-group">
-								<label htmlFor="name">Enter Name</label>
-								<input type="text" placeholder="Name" value={this.state.name} 
-								onChange={(e) => this.setState({  name: e.target.value })}
-								/>
-							</div>
-							<input type="submit" className="submit-btn"/>
+				{ this.state.popup && !this.state.token &&
+					<Popup open={true} disabled={true}>
+						<div className="popup-modal">
+							<form onSubmit={this.handleSubmit}>
+								<div className="form">
+									<div className="form-group">
+										<label htmlFor="email">Enter Email</label>
+										<input type="email" placeholder="Email" value={this.state.email} 
+										onChange={(e) => this.setState({ email: e.target.value })}
+										/>
+										{this.state.emailError && 
+										<small style={{color: "red", fontSize: "0.8rem", marginTop:"5px"}}>Enter Valid Email</small>}
+									</div>
+									<div className="form-group">
+										<label htmlFor="name">Enter Name</label>
+										<input type="text" placeholder="Name" value={this.state.name} 
+										onChange={(e) => this.setState({  name: e.target.value })}
+										/>
+									</div>
+									<input type="submit" className="submit-btn"/>
+								</div>
+								{this.state.error && <small style={{color: "red", fontSize: "0.8rem"}}>Enter Email and Name</small>}
+							</form>
 						</div>
-					</form>
-        </div>
-      </Popup>
-			}
+					</Popup>
+				}
 			<Appear duration={300}>
 				<div data-component='Room'>
 					<Notifications />
@@ -118,28 +161,27 @@ class Room extends React.Component
 					
 
 					<div className='room-close-wrapper'>
-                                                <div className='room-close-button'>
-                                                        <a
-                                                                className='close-button'
-                                                                onClick={(event) =>
-                                                                {
-                                                                        videoAction("connected", 0);
-                                                                        roomClient.close();
-                                                                        var strWindowFeatures = "location=yes,height=570,width=520,scrollbars=yes,status=yes";
-                                                                        var URL = "https://app.precisely.one";
-                                                                        var win = window.open(URL, "_self", strWindowFeatures);
-                                                                }}
-                                                        >
-
-                                                        <svg className='close-svg' >
-                                                                <rect className='close-rect' x="0" y="0" rx="25" fill="none" width="100%" height="100%"/>
-                                                        </svg>
-                                                                End Call
-                                                        </a>
-                                                </div>
-                                        </div>
-
-					<Peers />
+            <div className='room-close-button'>
+              <a
+                className='close-button'
+                onClick={(event) =>
+                {
+									videoAction("connected", 0);
+									localStorage.removeItem("auth-token");
+									localStorage.removeItem("roomId");
+                  roomClient.close();
+                  var strWindowFeatures = "location=yes,height=570,width=520,scrollbars=yes,status=yes";
+                  var URL = "https://app.precisely.one";
+                  var win = window.open(URL, "_self", strWindowFeatures);
+                }}
+              >
+						  	<svg className='close-svg' >
+              	<rect className='close-rect' x="0" y="0" rx="25" fill="none" width="100%" height="100%"/></svg>
+                	End Call
+              </a>
+            </div>
+          </div>
+				<Peers />
 
 					<div
 						className={classnames('me-container', {
