@@ -33,10 +33,55 @@ body {
 	height: 100%;
 }
 
+.popup-overlay {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.popup-modal{
+  background: #ffffff;
+  width: 38vw;
+	padding: 1.5rem 3rem;
+	border-radius: 1rem;
+}
+
+.form .form-group label{
+	display: block;
+	margin-bottom: 0.4rem;
+  margin-top: 1rem;
+}
+.form .form-group input{
+	display: block;
+	border: 1px solid #333333;
+	padding: 0.5rem;
+	box-shadow: none;
+	width: 100%;
+  background: #f4f4f4;
+	border-radius: 5px;
+}
+
+.form .submit-btn{
+	display: block;
+	margin: 1rem auto;	
+	width: 50%;
+	border: 2px solid #333333;
+	background: #eeeeee;
+	border-radius: 5px;
+	box-shadow: none;
+	padding: 0.3rem;
+	font-size: 1rem;
+  font-weight: 500;
+	transition: all 0.2s;
+}
+
+.form .submit-btn:hover{
+	background: #333333;
+	color: #f4f4f4;
+}
+
 #mediasoup-demo-app-container {
 	height: 100%;
 	width: 100%;
-
+	
 	// Components
 	@import './components/Room';
 	@import './components/Me';

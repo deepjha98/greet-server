@@ -22,7 +22,6 @@ import * as cookiesManager from './cookiesManager';
 import * as stateActions from './redux/stateActions';
 import reducers from './redux/reducers';
 import Room from './components/Room';
-import Popup from 'reactjs-popup';
 
 const logger = new Logger();
 const reduxMiddlewares = [ thunk ];

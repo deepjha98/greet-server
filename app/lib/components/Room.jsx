@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
@@ -15,9 +15,28 @@ import Peers from './Peers';
 import Notifications from './Notifications';
 import NetworkThrottle from './NetworkThrottle';
 import videoAction from "../utils/actionCall";
+import Popup from 'reactjs-popup';
 
 class Room extends React.Component
 {
+	constructor(props) {
+    super(props);
+    this.state = {
+			email: "",
+			name: "",
+			popup: true
+		}
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	
+	handleSubmit(e) {
+		e.preventDefault();
+		console.log(this);
+		console.log('Email', this.state.email);
+		console.log('nAME', this.state.name);
+		this.setState({  popup: false })
+	}
+
 	render()
 	{
 		const {
@@ -29,6 +48,30 @@ class Room extends React.Component
 		}	= this.props;
 
 		return (
+			<Fragment>
+				{ this.state.popup && 
+				<Popup open={true} disabled={true}>
+        <div className="popup-modal">
+					<form onSubmit={this.handleSubmit}>
+						<div className="form">
+							<div className="form-group">
+								<label htmlFor="email">Enter Email</label>
+								<input type="email" placeholder="Email" value={this.state.email} 
+								onChange={(e) => this.setState({ email: e.target.value })}
+								/>
+							</div>
+							<div className="form-group">
+								<label htmlFor="name">Enter Name</label>
+								<input type="text" placeholder="Name" value={this.state.name} 
+								onChange={(e) => this.setState({  name: e.target.value })}
+								/>
+							</div>
+							<input type="submit" className="submit-btn"/>
+						</div>
+					</form>
+        </div>
+      </Popup>
+			}
 			<Appear duration={300}>
 				<div data-component='Room'>
 					<Notifications />
@@ -164,6 +207,8 @@ class Room extends React.Component
 					/>
 				</div>
 			</Appear>
+			
+			</Fragment>
 		);
 	}
 
