@@ -110,7 +110,6 @@ export default class PeerView extends React.Component
 							onClick={() => onStatsClick(peer.id)}
 						/>
 					</div> */}
-
 					<div className={classnames('box')}>
 						<If condition={audioProducerId || audioConsumerId}>
 							<h1>audio</h1>

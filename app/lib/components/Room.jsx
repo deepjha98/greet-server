@@ -46,7 +46,7 @@ class Room extends React.Component
 					const { data } = await axios.post('https://precisely.one/api/v1/register_new_user_to_event',{
 						email: this.state.email,
 						name: this.state.name,
-						room_id: "sdfghj"
+						room_id: localStorage.getItem("roomId")
 					});
 					// console.log(data);
 					console.log(data.data);
@@ -65,17 +65,6 @@ class Room extends React.Component
 			setTimeout(() => this.setState({error: false}) , 3000)
 		}
 	}
-
-	componentDidMount(){
-		console.log("Mount");
-		// console.log(localStorage.getItem('auth-token'))
-		// if(localStorage.getItem('auth-token')){
-		// 	console.log("In here")
-		// 	this.setState({  popup: false });
-		// }
-		// console.log("Componet did mount")
-	}
-
 
 	render()
 	{

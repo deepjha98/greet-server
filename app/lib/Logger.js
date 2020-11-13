@@ -1,6 +1,6 @@
 import debug from 'debug';
 
-const APP_NAME = 'mediasoup-demo';
+const APP_NAME = 'precisely-demo';
 
 export default class Logger
 {

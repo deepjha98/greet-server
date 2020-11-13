@@ -203,7 +203,7 @@ async function run()
 				<Room />
 			</RoomContext.Provider>
 		</Provider>,
-		document.getElementById('mediasoup-demo-app-container')
+		document.getElementById('precisely-demo-app-container')
 	);
 }
 

@@ -1,7 +1,7 @@
 import jsCookie from 'js-cookie';
 
-const USER_COOKIE = 'mediasoup-demo.user';
-const DEVICES_COOKIE = 'mediasoup-demo.devices';
+const USER_COOKIE = 'precisely-demo.user';
+const DEVICES_COOKIE = 'precisely-demo.devices';
 
 export function getUser()
 {

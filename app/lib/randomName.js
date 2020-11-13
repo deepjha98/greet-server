@@ -10,7 +10,7 @@ export default function()
 // TODO: pokemon lib does not work with browserify (it just loads 'en' language)
 // so let's just use 'en'.
 //
-// https://github.com/versatica/mediasoup-demo/issues/45
+// https://github.com/versatica/precisely-demo/issues/45
 function detectLanguage()
 {
 	return 'en';

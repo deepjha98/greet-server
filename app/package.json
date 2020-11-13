@@ -1,5 +1,5 @@
 {
-  "name": "mediasoup-demo-app",
+  "name": "precisely-demo-app",
   "version": "3.0.0",
   "private": true,
   "description": "Precisely Greet",
@@ -21,7 +21,7 @@
     "face-api.js": "^0.21.0",
     "hark": "^1.2.3",
     "js-cookie": "^2.2.1",
-    "mediasoup-client": "github:versatica/mediasoup-client#v3",
+    "precisely-client": "github:versatica/precisely-client#v3",
     "pokemon": "^2.0.2",
     "prop-types": "^15.7.2",
     "protoo-client": "^4.0.4",
