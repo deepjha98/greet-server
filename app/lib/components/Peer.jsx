@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as appPropTypes from './appPropTypes';
@@ -8,6 +8,7 @@ import PeerView from './PeerView';
 
 const Peer = (props) =>
 {
+	const [isFullScreen, setIsFullScreen] = useState(false);
 	const {
 		roomClient,
 		peer,
@@ -15,7 +16,8 @@ const Peer = (props) =>
 		videoConsumer,
 		audioMuted,
 		faceDetection,
-		onSetStatsPeerId
+		onSetStatsPeerId,
+		id
 	} = props;
 
 	const audioEnabled = (
@@ -40,7 +42,30 @@ const Peer = (props) =>
 				<If condition={!videoConsumer}>
 					<div className='icon webcam-off' />
 				</If>
-			</div>
+				{/* peer-container */}
+				{/* <div> */}
+					<div className="icon" style={{
+						color: "#999", fontSize: "1.1rem", cursor: "pointer",
+						display: "flex", justifyContent: "center", alignItems: "center"
+				}} onClick={() => { 
+						console.log(id) 
+						const parent = document.getElementById(id);
+						console.log(parent);
+						console.log(parent.id);
+						if(isFullScreen) {
+							setIsFullScreen(false);
+							parent.className = 'peer-container';
+						}
+						else {
+							setIsFullScreen(true);
+							parent.className = 'full-screen';
+						}
+					}}>
+						{isFullScreen? <i class="fas fa-compress-alt"></i> : <i class="fas fa-expand-alt"></i> }
+						
+					</div>
+				</div>
+			{/* </div> */}
 
 			<PeerView
 				peer={peer}

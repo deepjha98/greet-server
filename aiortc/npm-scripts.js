@@ -33,14 +33,14 @@ switch (task)
 
 	case 'lint':
 	{
-		execute('MEDIASOUP_NODE_LANGUAGE=typescript eslint -c .eslintrc.js --ext=ts src/');
+		execute('precisely_NODE_LANGUAGE=typescript eslint -c .eslintrc.js --ext=ts src/');
 
 		break;
 	}
 
 	case 'lint:fix':
 	{
-		execute('MEDIASOUP_NODE_LANGUAGE=typescript eslint -c .eslintrc.js --fix --ext=ts src/');
+		execute('precisely_NODE_LANGUAGE=typescript eslint -c .eslintrc.js --fix --ext=ts src/');
 
 		break;
 	}

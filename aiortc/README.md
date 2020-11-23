@@ -1,5 +1,5 @@
 
-## mediasoup-demo Node app using mediasoup-client-aiortc
+## precisely-demo Node app using precisely-client-aiortc
 
 See [index.ts](./src/index.ts).
 

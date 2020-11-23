@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { Worker } from 'mediasoup-client-aiortc';
-import { types as mediasoupClientTypes } from 'mediasoup-client';
+import { Worker } from 'precisely-client-aiortc';
+import { types as preciselyClientTypes } from 'precisely-client';
 export declare class RoomClient {
     _closed: boolean;
     _displayName: string;
@@ -15,16 +15,16 @@ export declare class RoomClient {
     _useSharingSimulcast: boolean;
     _protooUrl: string;
     _protoo: any;
-    _mediasoupDevice: mediasoupClientTypes.Device;
-    _sendTransport: mediasoupClientTypes.Transport;
-    _recvTransport: mediasoupClientTypes.Transport;
-    _micProducer: mediasoupClientTypes.Producer;
-    _webcamProducer: mediasoupClientTypes.Producer;
-    _shareProducer: mediasoupClientTypes.Producer;
-    _chatDataProducer: mediasoupClientTypes.DataProducer;
-    _botDataProducer: mediasoupClientTypes.DataProducer;
-    _consumers: Map<string, mediasoupClientTypes.Consumer>;
-    _dataConsumers: Map<string, mediasoupClientTypes.DataConsumer>;
+    _preciselyDevice: preciselyClientTypes.Device;
+    _sendTransport: preciselyClientTypes.Transport;
+    _recvTransport: preciselyClientTypes.Transport;
+    _micProducer: preciselyClientTypes.Producer;
+    _webcamProducer: preciselyClientTypes.Producer;
+    _shareProducer: preciselyClientTypes.Producer;
+    _chatDataProducer: preciselyClientTypes.DataProducer;
+    _botDataProducer: preciselyClientTypes.DataProducer;
+    _consumers: Map<string, preciselyClientTypes.Consumer>;
+    _dataConsumers: Map<string, preciselyClientTypes.DataConsumer>;
     _worker: Worker;
     _localStatsPeriodicTimer: NodeJS.Timer;
     /**
@@ -87,7 +87,7 @@ export declare class RoomClient {
     hideLocalStats(): Promise<void>;
     _joinRoom(): Promise<void>;
     _getWebcamType(device: any): string;
-    _pauseConsumer(consumer: mediasoupClientTypes.Consumer): Promise<void>;
-    _resumeConsumer(consumer: mediasoupClientTypes.Consumer): Promise<void>;
+    _pauseConsumer(consumer: preciselyClientTypes.Consumer): Promise<void>;
+    _resumeConsumer(consumer: preciselyClientTypes.Consumer): Promise<void>;
 }
 //# sourceMappingURL=RoomClient.d.ts.map

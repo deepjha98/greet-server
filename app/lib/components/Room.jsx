@@ -17,6 +17,7 @@ import NetworkThrottle from './NetworkThrottle';
 import videoAction from "../utils/actionCall";
 import Popup from 'reactjs-popup';
 import axios from "axios";
+import swal from "sweetalert";
 
 class Room extends React.Component
 {
@@ -43,18 +44,28 @@ class Room extends React.Component
 				setTimeout(() => this.setState({emailError: false}) , 3000)
 			}else{
 				try {
-					const { data } = await axios.post('https://precisely.one/api/v1/register_new_user_to_event',{
-						email: this.state.email,
-						name: this.state.name,
-						room_id: localStorage.getItem("roomId")
-					});
-					// console.log(data);
-					console.log(data.data);
-					localStorage.setItem("auth-token", data.data.access_token);
-					videoAction("connected", true);
-					this.setState({ popup: false })
+					const { data } = await axios.get(`https://precisely.one/api/v1/verify_email_registration_to_event?room_id=${localStorage.getItem("roomId")}&name=${this.state.name}&email=${this.state.email}`);
+					console.log(data);
+					try {
+						const { data } = await axios.post('https://precisely.one/api/v1/register_new_user_to_event',{
+							email: this.state.email,
+							name: this.state.name,
+							room_id: localStorage.getItem("roomId")
+						});
+						// console.log(data);
+						console.log(data.data);
+						localStorage.setItem("auth-token", data.data.access_token);
+						videoAction("connected", true);
+						this.setState({ popup: false })
+						swal("Register Success", "", "success");
+					} catch (error) {
+						swal("Unable to register", "", "error");
+						console.log("error", error.response);
+					}
 				} catch (error) {
-					console.log("error", error.response);
+					swal("Forbidden", "Please enter a valid email, this email is not assigned with this event, contact manager", "error");
+					console.log('-------------------------------------------')
+					console.log(error.response.data);
 				}
 				console.log('Email', this.state.email);
 				console.log('Name', this.state.name);
@@ -88,6 +99,7 @@ class Room extends React.Component
 										<input type="email" placeholder="Email" value={this.state.email} 
 										onChange={(e) => this.setState({ email: e.target.value })}
 										/>
+										<small style={{color: "#555555", fontSize: "0.8rem", marginTop:"5px"}}>Please use the exact same email address given by Precisely</small>
 										{this.state.emailError && 
 										<small style={{color: "red", fontSize: "0.8rem", marginTop:"5px"}}>Enter Valid Email</small>}
 									</div>

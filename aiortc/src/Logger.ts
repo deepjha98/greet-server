@@ -1,6 +1,6 @@
 import debug from 'debug';
 
-const APP_NAME = 'mediasoup-demo-aiortc';
+const APP_NAME = 'precisely-demo-aiortc';
 
 export class Logger
 {

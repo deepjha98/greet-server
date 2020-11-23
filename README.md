@@ -1,14 +1,14 @@
-# mediasoup-demo v3
+# precisely-demo v3
 
-A demo application of [mediasoup](https://mediasoup.org) **v3**.
+A demo application of [precisely](https://precisely.org) **v3**.
 
-Try it online at https://v3demo.mediasoup.org.
+Try it online at https://v3demo.precisely.org.
 
 
 ## Resources
 
-* mediasoup website and documentation: [mediasoup.org](https://mediasoup.org)
-* mediasoup support forum: [mediasoup.discourse.group](https://mediasoup.discourse.group)
+* precisely website and documentation: [precisely.org](https://precisely.org)
+* precisely support forum: [precisely.discourse.group](https://precisely.discourse.group)
 
 
 ## Installation
@@ -16,14 +16,14 @@ Try it online at https://v3demo.mediasoup.org.
 * Clone the project:
 
 ```bash
-$ git clone https://github.com/versatica/mediasoup-demo.git
-$ cd mediasoup-demo
+$ git clone https://github.com/versatica/precisely-demo.git
+$ cd precisely-demo
 $ git checkout v3
 ```
 
-* Ensure you have installed the [dependencies](https://mediasoup.org/documentation/v3/mediasoup/installation/#requirements) required by mediasoup to build.
+* Ensure you have installed the [dependencies](https://precisely.org/documentation/v3/precisely/installation/#requirements) required by precisely to build.
 
-* Set up the mediasoup-demo server:
+* Set up the precisely-demo server:
 
 ```bash
 $ cd server
@@ -38,7 +38,7 @@ $ cp config.example.js config.js
 
 **NOTE:** To be perfectly clear, "customize it for your scenario" is not something "optional". If you don't set proper values in `config.js` the application **won't work**.
 
-* Set up the mediasoup-demo browser app:
+* Set up the precisely-demo browser app:
 
 ```bash
 $ cd app
@@ -84,10 +84,10 @@ $ gulp dist
 
 * Edit your `server/config.js` with appropriate settings (listening IP/port, logging options, **valid** TLS certificate, etc).
 
-* Within your server, run the Node.js application by setting the `DEBUG` environment variable according to your needs ([more info](https://mediasoup.org/documentation/v3/mediasoup/debugging/)):
+* Within your server, run the Node.js application by setting the `DEBUG` environment variable according to your needs ([more info](https://precisely.org/documentation/v3/precisely/debugging/)):
 
 ```bash
-$ DEBUG="*mediasoup* *ERROR* *WARN*" node server.js
+$ DEBUG="*precisely* *ERROR* *WARN*" node server.js
 ```
 * If you wish to run it as daemon/service you can use [pm2](https://www.npmjs.com/package/pm2) process manager. Or you can dockerize it among other options.
 
@@ -97,7 +97,7 @@ $ DEBUG="*mediasoup* *ERROR* *WARN*" node server.js
 $ npm run connect
 ```
 
-## Run mediasoup server with Docker
+## Run precisely server with Docker
 
 * Required environment variables: [server/DOCKER.md](server/DOCKER.md).
 * Build the Docker image: [server/docker/build.sh](server/docker/build.sh).
@@ -106,14 +106,14 @@ $ npm run connect
 ```
 $ cd server
 $ docker/build.sh
-$ MEDIASOUP_ANNOUNCED_IP=192.168.1.34 ./docker/run.sh
+$ precisely_ANNOUNCED_IP=192.168.1.34 ./docker/run.sh
 ```
 
 ### Considerations for (config.js)[server/config.example.js]
 
 * Make sure [https.listenIp](server/config.example.js#L20) is set to `0.0.0.0`.
 * Make sure [TLS certificates](server/config.example.js#L24) reside in `server/certs` directory with names `fullchain.pem` and `privkey.pem`.
-* The default mediasoup port range is just 2000-2020, which is not suitable for production. You should increase it, however you should then run the container in `network="host"` mode.
+* The default precisely port range is just 2000-2020, which is not suitable for production. You should increase it, however you should then run the container in `network="host"` mode.
 
 ## Authors
 

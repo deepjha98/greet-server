@@ -51,7 +51,7 @@ const mediasoupWorkers = [];
 
 // Index of next mediasoup Worker to use.
 // @type {Number}
-let nextMediasoupWorkerIdx = 0;
+let nextmediasoupWorkerIdx = 0;
 
 run();
 
@@ -65,7 +65,7 @@ async function run()
 		await interactiveClient();
 
 	// Run a mediasoup Worker.
-	await runMediasoupWorkers();
+	await runmediasoupWorkers();
 
 	// Create Express app.
 	await createExpressApp();
@@ -89,7 +89,7 @@ async function run()
 /**
  * Launch as many mediasoup Workers as given in the configuration file.
  */
-async function runMediasoupWorkers()
+async function runmediasoupWorkers()
 {
 	const { numWorkers } = config.mediasoup;
 
@@ -500,12 +500,12 @@ async function runProtooWebSocketServer()
 /**
  * Get next mediasoup Worker.
  */
-function getMediasoupWorker()
+function getmediasoupWorker()
 {
-	const worker = mediasoupWorkers[nextMediasoupWorkerIdx];
+	const worker = mediasoupWorkers[nextmediasoupWorkerIdx];
 
-	if (++nextMediasoupWorkerIdx === mediasoupWorkers.length)
-		nextMediasoupWorkerIdx = 0;
+	if (++nextmediasoupWorkerIdx === mediasoupWorkers.length)
+		nextmediasoupWorkerIdx = 0;
 
 	return worker;
 }
@@ -522,7 +522,7 @@ async function getOrCreateRoom({ roomId })
 	{
 		logger.info('creating a new Room [roomId:%s]', roomId);
 
-		const mediasoupWorker = getMediasoupWorker();
+		const mediasoupWorker = getmediasoupWorker();
 
 		room = await Room.create({ mediasoupWorker, roomId });
 

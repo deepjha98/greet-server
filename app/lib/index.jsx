@@ -22,6 +22,8 @@ import * as cookiesManager from './cookiesManager';
 import * as stateActions from './redux/stateActions';
 import reducers from './redux/reducers';
 import Room from './components/Room';
+import axios from "axios"
+import swal from "sweetalert";
 
 const logger = new Logger();
 const reduxMiddlewares = [ thunk ];
@@ -74,6 +76,46 @@ async function run()
 		window.location.href =`https://video.precisely.one/?roomId=${urlParser.query.roomId}`;
 	}else{
 		localStorage.setItem("roomId", urlParser.query.roomId);
+		if(localStorage.getItem("auth-token")){
+		try {
+			const { data } = await axios.get(`https://precisely.one/api/v1/verify_access_token_validity_for_event?room_id=${localStorage.getItem("roomId")}`, {
+				headers:{
+					Authorization: `Bearer ${localStorage.getItem("auth-token")}`,
+				}
+			});
+			console.log("fromServer",data);
+		} catch (error) {
+			console.log("Error", error.response.status);
+			if(error.response.status === 401){
+				swal({
+					title: "Unauthorised",
+					text: "Access token invalid, redirecting to https://app.precisely.one/",
+					icon: "error",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then(() => {
+					window.location.href = "https://app.precisely.one/";
+				});
+			}else if(error.response.status === 403){
+				console.log(error.response.data)
+				swal({
+					title: "Forbidden",
+					text: `${error.response.data.message}, redirecting to https://app.precisely.one/`,
+					icon: "error",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then(() => {
+					window.location.href = "https://app.precisely.one/";
+				});
+			}else{
+				if(error.response){
+					console.log(error.response.data);
+				}
+			}
+		}
+	}
 	}
 	let displayName =
 		urlParser.query.displayName || (cookiesManager.getUser() || {}).displayName;

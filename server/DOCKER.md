@@ -6,12 +6,12 @@
 * [DEBUG](#debug)
 * [DOMAIN](#domain)
 * [PROTOO_LISTEN_PORT](#protoo_listen_port)
-* [MEDIASOUP_LISTEN_IP](#mediasoup_listen_ip)
-* [MEDIASOUP_ANNOUNCED_IP](#mediasoup_announced_ip)
-* [MEDIASOUP_MIN_PORT](#mediasoup_min_port)
-* [MEDIASOUP_MAX_PORT](#mediasoup_max_port)
-* [MEDIASOUP_USE_VALGRIND](#mediasoup_use_valgrind)
-* [MEDIASOUP_VALGRIND_OPTIONS](#mediasoup_valgrind_options)
+* [mediasoup_LISTEN_IP](#mediasoup_listen_ip)
+* [mediasoup_ANNOUNCED_IP](#mediasoup_announced_ip)
+* [mediasoup_MIN_PORT](#mediasoup_min_port)
+* [mediasoup_MAX_PORT](#mediasoup_max_port)
+* [mediasoup_USE_VALGRIND](#mediasoup_use_valgrind)
+* [mediasoup_VALGRIND_OPTIONS](#mediasoup_valgrind_options)
 
 
 ### `DEBUG`
@@ -42,7 +42,7 @@ The listening port for protoo WebSocket server.
 * Valid values: port
 * Default: "4443"
 
-### `MEDIASOUP_LISTEN_IP`
+### `mediasoup_LISTEN_IP`
 
 The listening IP for audio/video in mediasoup.
 
@@ -50,7 +50,7 @@ The listening IP for audio/video in mediasoup.
 * Valid values: IPv4 or IPv6
 * Default: "127.0.0.1"
 
-### `MEDIASOUP_ANNOUNCED_IP`
+### `mediasoup_ANNOUNCED_IP`
 
 The announced IP for audio/video in mediasoup.
 
@@ -58,7 +58,7 @@ The announced IP for audio/video in mediasoup.
 * Valid values: IPv4 or IPv6
 * Default: ""
 
-### `MEDIASOUP_MIN_PORT`
+### `mediasoup_MIN_PORT`
 
 The min port for audio/video in mediasoup.
 
@@ -66,7 +66,7 @@ The min port for audio/video in mediasoup.
 * Valid values: port
 * Default: "2000"
 
-### `MEDIASOUP_MAX_PORT`
+### `mediasoup_MAX_PORT`
 
 The max port for audio/video in mediasoup.
 
@@ -74,7 +74,7 @@ The max port for audio/video in mediasoup.
 * Valid values: port
 * Default: "2020"
 
-### `MEDIASOUP_USE_VALGRIND`
+### `mediasoup_USE_VALGRIND`
 
 Flag to indicate whether valgrind is to be used.
 
@@ -82,7 +82,7 @@ Flag to indicate whether valgrind is to be used.
 * Valid values: bool
 * Default: "false"
 
-### `MEDIASOUP_VALGRIND_OPTIONS`
+### `mediasoup_VALGRIND_OPTIONS`
 
 Valgrind command line options.
 

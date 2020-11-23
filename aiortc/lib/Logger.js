@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const debug_1 = __importDefault(require("debug"));
-const APP_NAME = 'mediasoup-demo-aiortc';
+const APP_NAME = 'precisely-demo-aiortc';
 class Logger {
     constructor(prefix) {
         if (prefix) {

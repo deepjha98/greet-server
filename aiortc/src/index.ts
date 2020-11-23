@@ -21,8 +21,8 @@ const store = createReduxStore(
 RoomClient.init({ store });
 
 const roomId = process.env.ROOM_ID || 'test';
-const peerId = process.env.PEER_ID || 'mediasoup-client-aiortc-id';
-const displayName = process.env.DISPLAY_NAME || 'mediasoup-client-aiortc';
+const peerId = process.env.PEER_ID || 'precisely-client-aiortc-id';
+const displayName = process.env.DISPLAY_NAME || 'precisely-client-aiortc';
 const forceTcp = process.env.FORCE_TCP === 'true' ? true : false;
 const produce = process.env.PRODUCE === 'false' ? false : true;
 const consume = process.env.CONSUME === 'false' ? false : true;
@@ -49,7 +49,7 @@ const options =
 	externalVideo
 };
 
-logger.debug(`starting mediasoup-demo-aiortc: ${JSON.stringify(options, undefined, 2)}`);
+logger.debug(`starting precisely-demo-aiortc: ${JSON.stringify(options, undefined, 2)}`);
 
 const roomClient = new RoomClient(options);
 

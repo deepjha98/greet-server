@@ -16,6 +16,7 @@ const Peers = ({ peers, activeSpeakerId }) =>
 					return (
 						<Appear key={peer.id} duration={1000}>
 							<div
+								id={peer.id}
 								className={classnames('peer-container', {
 									'active-speaker' : peer.id === activeSpeakerId
 								})}

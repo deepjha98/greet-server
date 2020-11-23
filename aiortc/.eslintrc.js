@@ -173,7 +173,7 @@ const eslintConfig =
 	}
 };
 
-switch (process.env.MEDIASOUP_NODE_LANGUAGE)
+switch (process.env.precisely_NODE_LANGUAGE)
 {
 	case 'typescript':
 	{
@@ -216,7 +216,7 @@ switch (process.env.MEDIASOUP_NODE_LANGUAGE)
 
 	default:
 	{
-		throw new TypeError('wrong/missing MEDIASOUP_NODE_LANGUAGE env');
+		throw new TypeError('wrong/missing precisely_NODE_LANGUAGE env');
 	}
 }
 

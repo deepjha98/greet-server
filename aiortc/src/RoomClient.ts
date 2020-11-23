@@ -1,13 +1,13 @@
 // @ts-ignore
 import protooClient from 'protoo-client';
-import * as mediasoupClient from 'mediasoup-client';
+import * as preciselyClient from 'precisely-client';
 import {
 	version,
 	createWorker,
 	Worker,
 	WorkerLogLevel
-} from 'mediasoup-client-aiortc';
-import { types as mediasoupClientTypes } from 'mediasoup-client';
+} from 'precisely-client-aiortc';
+import { types as preciselyClientTypes } from 'precisely-client';
 import { Logger } from './Logger';
 import { getProtooUrl } from './urlFactory';
 import * as stateActions from './redux/stateActions';
@@ -68,38 +68,38 @@ export class RoomClient
 	// protoo-client Peer instance.
 	_protoo: any = null;
 
-	// mediasoup-client Device instance.
-	_mediasoupDevice: mediasoupClientTypes.Device = null;
+	// precisely-client Device instance.
+	_preciselyDevice: preciselyClientTypes.Device = null;
 
-	// mediasoup Transport for sending.
-	_sendTransport: mediasoupClientTypes.Transport = null;
+	// precisely Transport for sending.
+	_sendTransport: preciselyClientTypes.Transport = null;
 
-	// mediasoup Transport for receiving.
-	// @type {mediasoupClient.Transport}
-	_recvTransport: mediasoupClientTypes.Transport = null;
+	// precisely Transport for receiving.
+	// @type {preciselyClient.Transport}
+	_recvTransport: preciselyClientTypes.Transport = null;
 
-	// Local mic mediasoup Producer.
-	_micProducer: mediasoupClientTypes.Producer = null;
+	// Local mic precisely Producer.
+	_micProducer: preciselyClientTypes.Producer = null;
 
-	// Local webcam mediasoup Producer.
-	_webcamProducer: mediasoupClientTypes.Producer = null;
+	// Local webcam precisely Producer.
+	_webcamProducer: preciselyClientTypes.Producer = null;
 
-	// Local share mediasoup Producer.
-	_shareProducer: mediasoupClientTypes.Producer = null;
+	// Local share precisely Producer.
+	_shareProducer: preciselyClientTypes.Producer = null;
 
 	// Local chat DataProducer.
-	_chatDataProducer: mediasoupClientTypes.DataProducer = null;
+	_chatDataProducer: preciselyClientTypes.DataProducer = null;
 
 	// Local bot DataProducer.
-	// @type {mediasoupClient.DataProducer}
-	_botDataProducer: mediasoupClientTypes.DataProducer = null;
+	// @type {preciselyClient.DataProducer}
+	_botDataProducer: preciselyClientTypes.DataProducer = null;
 
-	// mediasoup Consumers.
-	_consumers: Map<string, mediasoupClientTypes.Consumer> = new Map();
+	// precisely Consumers.
+	_consumers: Map<string, preciselyClientTypes.Consumer> = new Map();
 
-	// mediasoup DataConsumers.
-	// @type {Map<String, mediasoupClient.DataConsumer>}
-	_dataConsumers: Map<string, mediasoupClientTypes.DataConsumer> = new Map();
+	// precisely DataConsumers.
+	// @type {Map<String, preciselyClient.DataConsumer>}
+	_dataConsumers: Map<string, preciselyClientTypes.DataConsumer> = new Map();
 
 	// Worker instance.
 	_worker: Worker;
@@ -178,7 +178,7 @@ export class RoomClient
 		// Close protoo Peer
 		this._protoo.close();
 
-		// Close mediasoup Transports.
+		// Close precisely Transports.
 		if (this._sendTransport)
 			this._sendTransport.close();
 
@@ -217,7 +217,7 @@ export class RoomClient
 		{
 			logger.error('WebSocket disconnected');
 
-			// Close mediasoup Transports.
+			// Close precisely Transports.
 			if (this._sendTransport)
 			{
 				this._sendTransport.close();
@@ -291,7 +291,7 @@ export class RoomClient
 						});
 
 						const { spatialLayers, temporalLayers } =
-							mediasoupClient.parseScalabilityMode(
+							preciselyClient.parseScalabilityMode(
 								consumer.rtpParameters.encodings[0].scalabilityMode);
 
 						store.dispatch(stateActions.addConsumer(
@@ -657,7 +657,7 @@ export class RoomClient
 		if (this._micProducer)
 			return;
 
-		if (!this._mediasoupDevice.canProduce('audio'))
+		if (!this._preciselyDevice.canProduce('audio'))
 		{
 			logger.error('enableMic() | cannot produce audio');
 
@@ -808,7 +808,7 @@ export class RoomClient
 		if (this._webcamProducer)
 			return;
 
-		if (!this._mediasoupDevice.canProduce('video'))
+		if (!this._preciselyDevice.canProduce('video'))
 		{
 			logger.error('enableWebcam() | cannot produce video');
 
@@ -1572,7 +1572,7 @@ export class RoomClient
 
 		try
 		{
-			this._mediasoupDevice = new mediasoupClient.Device(
+			this._preciselyDevice = new preciselyClient.Device(
 				{
 					handlerFactory : this._worker.createHandlerFactory()
 				});
@@ -1580,9 +1580,9 @@ export class RoomClient
 			const routerRtpCapabilities =
 				await this._protoo.request('getRouterRtpCapabilities');
 
-			await this._mediasoupDevice.load({ routerRtpCapabilities });
+			await this._preciselyDevice.load({ routerRtpCapabilities });
 
-			// Create mediasoup Transport for sending (unless we don't want to produce).
+			// Create precisely Transport for sending (unless we don't want to produce).
 			if (this._produce)
 			{
 				const transportInfo = await this._protoo.request(
@@ -1592,7 +1592,7 @@ export class RoomClient
 						producing        : true,
 						consuming        : false,
 						sctpCapabilities : this._useDataChannel
-							? this._mediasoupDevice.sctpCapabilities
+							? this._preciselyDevice.sctpCapabilities
 							: undefined
 					});
 
@@ -1604,7 +1604,7 @@ export class RoomClient
 					sctpParameters
 				} = transportInfo;
 
-				this._sendTransport = this._mediasoupDevice.createSendTransport(
+				this._sendTransport = this._preciselyDevice.createSendTransport(
 					{
 						id,
 						iceParameters,
@@ -1688,7 +1688,7 @@ export class RoomClient
 				});
 			}
 
-			// Create mediasoup Transport for sending (unless we don't want to consume).
+			// Create precisely Transport for sending (unless we don't want to consume).
 			if (this._consume)
 			{
 				const transportInfo = await this._protoo.request(
@@ -1698,7 +1698,7 @@ export class RoomClient
 						producing        : false,
 						consuming        : true,
 						sctpCapabilities : this._useDataChannel
-							? this._mediasoupDevice.sctpCapabilities
+							? this._preciselyDevice.sctpCapabilities
 							: undefined
 					});
 
@@ -1710,7 +1710,7 @@ export class RoomClient
 					sctpParameters
 				} = transportInfo;
 
-				this._recvTransport = this._mediasoupDevice.createRecvTransport(
+				this._recvTransport = this._preciselyDevice.createRecvTransport(
 					{
 						id,
 						iceParameters,
@@ -1742,10 +1742,10 @@ export class RoomClient
 					displayName     : this._displayName,
 					device          : this._device,
 					rtpCapabilities : this._consume
-						? this._mediasoupDevice.rtpCapabilities
+						? this._preciselyDevice.rtpCapabilities
 						: undefined,
 					sctpCapabilities : this._useDataChannel && this._consume
-						? this._mediasoupDevice.sctpCapabilities
+						? this._preciselyDevice.sctpCapabilities
 						: undefined
 				});
 
@@ -1771,8 +1771,8 @@ export class RoomClient
 				// Set our media capabilities.
 				store.dispatch(stateActions.setMediaCapabilities(
 					{
-						canSendMic    : this._mediasoupDevice.canProduce('audio'),
-						canSendWebcam : this._mediasoupDevice.canProduce('video')
+						canSendMic    : this._preciselyDevice.canProduce('audio'),
+						canSendWebcam : this._preciselyDevice.canProduce('video')
 					}));
 
 				this.enableMic();
@@ -1812,7 +1812,7 @@ export class RoomClient
 		}
 	}
 
-	async _pauseConsumer(consumer: mediasoupClientTypes.Consumer): Promise<void>
+	async _pauseConsumer(consumer: preciselyClientTypes.Consumer): Promise<void>
 	{
 		if (consumer.paused)
 			return;
@@ -1832,7 +1832,7 @@ export class RoomClient
 		}
 	}
 
-	async _resumeConsumer(consumer: mediasoupClientTypes.Consumer): Promise<void>
+	async _resumeConsumer(consumer: preciselyClientTypes.Consumer): Promise<void>
 	{
 		if (!consumer.paused)
 			return;

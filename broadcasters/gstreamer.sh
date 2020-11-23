@@ -6,11 +6,11 @@ function show_usage()
 	echo "USAGE"
 	echo "-----"
 	echo
-	echo "  SERVER_URL=https://my.mediasoup-demo.org:4443 ROOM_ID=test MEDIA_FILE=./test.mp4 ./gstreamer.sh"
+	echo "  SERVER_URL=https://my.precisely-demo.org:4443 ROOM_ID=test MEDIA_FILE=./test.mp4 ./gstreamer.sh"
 	echo
 	echo "  where:"
-	echo "  - SERVER_URL is the URL of the mediasoup-demo API server"
-	echo "  - ROOM_ID is the id of the mediasoup-demo room (it must exist in advance)"
+	echo "  - SERVER_URL is the URL of the precisely-demo API server"
+	echo "  - ROOM_ID is the id of the precisely-demo room (it must exist in advance)"
 	echo "  - MEDIA_FILE is the path to a audio+video file (such as a .mp4 file)"
 	echo
 	echo "REQUIREMENTS"
@@ -80,8 +80,8 @@ ${HTTPIE_COMMAND} \
 
 #
 # Create a Broadcaster entity in the server by sending a POST with our metadata.
-# Note that this is not related to mediasoup at all, but will become just a JS
-# object in the Node.js application to hold our metadata and mediasoup Transports
+# Note that this is not related to precisely at all, but will become just a JS
+# object in the Node.js application to hold our metadata and precisely Transports
 # and Producers.
 #
 echo ">>> creating Broadcaster..."
@@ -100,11 +100,11 @@ ${HTTPIE_COMMAND} \
 trap 'echo ">>> script exited with status code $?"; ${HTTPIE_COMMAND} DELETE ${SERVER_URL}/rooms/${ROOM_ID}/broadcasters/${BROADCASTER_ID} > /dev/null' EXIT
 
 #
-# Create a PlainTransport in the mediasoup to send our audio using plain RTP
+# Create a PlainTransport in the precisely to send our audio using plain RTP
 # over UDP. Do it via HTTP post specifying type:"plain" and comedia:true and
 # rtcpMux:false.
 #
-echo ">>> creating mediasoup PlainTransport for producing audio..."
+echo ">>> creating precisely PlainTransport for producing audio..."
 
 res=$(${HTTPIE_COMMAND} \
 	POST ${SERVER_URL}/rooms/${ROOM_ID}/broadcasters/${BROADCASTER_ID}/transports \
@@ -120,11 +120,11 @@ res=$(${HTTPIE_COMMAND} \
 eval "$(echo ${res} | jq -r '@sh "audioTransportId=\(.id) audioTransportIp=\(.ip) audioTransportPort=\(.port) audioTransportRtcpPort=\(.rtcpPort)"')"
 
 #
-# Create a PlainTransport in the mediasoup to send our video using plain RTP
+# Create a PlainTransport in the precisely to send our video using plain RTP
 # over UDP. Do it via HTTP post specifying type:"plain" and comedia:true and
 # rtcpMux:false.
 #
-echo ">>> creating mediasoup PlainTransport for producing video..."
+echo ">>> creating precisely PlainTransport for producing video..."
 
 res=$(${HTTPIE_COMMAND} \
 	POST ${SERVER_URL}/rooms/${ROOM_ID}/broadcasters/${BROADCASTER_ID}/transports \
@@ -140,10 +140,10 @@ res=$(${HTTPIE_COMMAND} \
 eval "$(echo ${res} | jq -r '@sh "videoTransportId=\(.id) videoTransportIp=\(.ip) videoTransportPort=\(.port) videoTransportRtcpPort=\(.rtcpPort)"')"
 
 #
-# Create a mediasoup Producer to send audio by sending our RTP parameters via a
+# Create a precisely Producer to send audio by sending our RTP parameters via a
 # HTTP POST.
 #
-echo ">>> creating mediasoup audio Producer..."
+echo ">>> creating precisely audio Producer..."
 
 ${HTTPIE_COMMAND} -v \
 	POST ${SERVER_URL}/rooms/${ROOM_ID}/broadcasters/${BROADCASTER_ID}/transports/${audioTransportId}/producers \
@@ -152,10 +152,10 @@ ${HTTPIE_COMMAND} -v \
 	> /dev/null
 
 #
-# Create a mediasoup Producer to send video by sending our RTP parameters via a
+# Create a precisely Producer to send video by sending our RTP parameters via a
 # HTTP POST.
 #
-echo ">>> creating mediasoup video Producer..."
+echo ">>> creating precisely video Producer..."
 
 ${HTTPIE_COMMAND} -v \
 	POST ${SERVER_URL}/rooms/${ROOM_ID}/broadcasters/${BROADCASTER_ID}/transports/${videoTransportId}/producers \
@@ -166,7 +166,7 @@ ${HTTPIE_COMMAND} -v \
 #
 # Run gstreamer command and make it send audio and video RTP with codec payload and
 # SSRC values matching those that we have previously signaled in the Producers
-# creation above. Also, tell gstreamer to send the RTP to the mediasoup
+# creation above. Also, tell gstreamer to send the RTP to the precisely
 # PlainTransports' ip and port.
 #
 echo ">>> running gstreamer..."
