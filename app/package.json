@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
+    "@tensorflow-models/body-pix": "^2.0.5",
+    "@tensorflow/tfjs": "^2.7.0",
     "axios": "0.21.0",
     "bowser": "^2.9.0",
     "classnames": "^2.2.6",
@@ -21,8 +23,8 @@
     "face-api.js": "^0.21.0",
     "hark": "^1.2.3",
     "js-cookie": "^2.2.1",
-    "pokemon": "^2.0.2",
     "mediasoup-client": "github:versatica/mediasoup-client#v3",
+    "pokemon": "^2.0.2",
     "prop-types": "^15.7.2",
     "protoo-client": "^4.0.4",
     "random-string": "^0.2.0",

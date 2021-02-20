@@ -9,6 +9,8 @@ import { withRoomContext } from '../RoomContext';
 import * as stateActions from '../redux/stateActions';
 import PeerView from './PeerView';
 import videoAction from "../utils/actionCall"
+import * as bodyPix from '@tensorflow-models/body-pix';
+ 
 
 class Me extends React.Component
 {
@@ -18,6 +20,46 @@ class Me extends React.Component
 
 		this._mounted = false;
 		this._rootNode = null;
+		this.options = {
+                                multiplier: 0.75,
+                                stride: 32,
+                                quantBytes: 4
+                        };
+
+		this.blurBack = this.blurBack.bind(this)
+		this.perform = this.perform.bind(this)
+
+	}
+
+	blurBack() {
+		console.log("In blur");
+		console.log(this.props.videoProducer)
+		if(this.props.videoProducer) {
+			console.log(this.props.videoProducer.track)
+			this.options = {
+				multiplier: 0.75,
+				stride: 32,
+				quantBytes: 4
+			}
+			bodyPix.load(this.options)
+				.then(net => this.perform(net))
+				.catch(err => console.log(err))
+		}
+	}
+
+	async perform (net) {
+
+		while (startBtn.disabled && blurBtn.hidden) {
+			const segmentation = await net.segmentPerson(video);
+	
+			const backgroundBlurAmount = 6;
+			const edgeBlurAmount = 6;
+			const flipHorizontal = true;
+	
+			bodyPix.drawBokehEffect(
+				canvas, videoElement, segmentation, backgroundBlurAmount,
+				edgeBlurAmount, flipHorizontal);		
+		}
 	}
 
 	render()
@@ -31,6 +73,8 @@ class Me extends React.Component
 			faceDetection,
 			onSetStatsPeerId
 		} = this.props;
+
+		this.blurBack();
 
 		let micState;
 
