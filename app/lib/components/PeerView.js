@@ -12,7 +12,6 @@ import EditableInput from "./EditableInput";
 
 // IMPORTING THE TensorFlow Modules for background effect
 import * as bodyPix from "@tensorflow-models/body-pix";
-// import * as tf from "@tensorflow/tfjs";
 
 const logger = new Logger("PeerView");
 
@@ -20,6 +19,23 @@ const tinyFaceDetectorOptions = new faceapi.TinyFaceDetectorOptions({
   inputSize: 160,
   scoreThreshold: 0.5,
 });
+//RUNNING THE BLUR EFFECT
+//------Getting video stream from videoSrc object-----
+const loadBodyPix = async () => {
+  console.log("====================");
+  const options = {
+    architecture: "MobileNetV1",
+    multiplier: 0.5,
+    stride: 32,
+    quantBytes: 4,
+  };
+  const net = await bodyPix.load(options);
+  console.log("BodyPix model loaded.");
+
+  setInterval(() => {
+    console.log(net);
+  }, 10);
+};
 
 export default class PeerView extends React.Component {
   constructor(props) {
@@ -54,24 +70,9 @@ export default class PeerView extends React.Component {
     // requestAnimationFrame for face detection.
     this._faceDetectionRequestAnimationFrame = null;
     //
-    this.loadBodyPix = this.loadBodyPix.bind(this);
+    // this.loadBodyPix = this.loadBodyPix.bind(this);
   }
-  //RUNNING THE BLUR EFFECT
-  //------Getting video stream from videoSrc object-----
-  async loadBodyPix() {
-    console.log("====================");
-    this.options = {
-      multiplier: 0.5,
-      stride: 32,
-      quantBytes: 4,
-    };
-    this.net = await bodyPix
-      .load(this.options)
-      .then(console.log(this.net))
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+
   // perform(net) {
   //   while (this.state.videoCanPlay && this.state.videoElemPaused === false) {
   //     const segmentation = net.segmentPerson(video);
@@ -130,8 +131,8 @@ export default class PeerView extends React.Component {
       videoElemPaused,
       maxSpatialLayer,
     } = this.state;
-    console.log("+++=====+++++++++=======++++++=====+++++++======");
-    this.loadBodyPix();
+
+    // loadBodyPix();
     return (
       <div data-component="PeerView">
         <div className="info">
@@ -626,6 +627,56 @@ export default class PeerView extends React.Component {
       if (faceDetection) this._startFaceDetection();
     } else {
       videoElem.srcObject = null;
+    }
+  }
+  async _detect(net) {
+    // Check data is available
+    if (
+      typeof videoElem.current !== "undefined" &&
+      videoElem.current !== null
+    ) {
+      // Get Video Properties
+      const video = videoElem.current.video;
+      const videoWidth = videoElem.current.video.videoWidth;
+      const videoHeight = videoElem.current.video.videoHeight;
+
+      // Set video width
+      videoElem.current.video.width = videoWidth;
+      videoElem.current.video.height = videoHeight;
+
+      // Set canvas height and width
+      this.canvasPerson.current.width = videoWidth;
+      this.canvasPerson.current.height = videoHeight;
+
+      // Make Detections
+      // * One of (see documentation below):
+      // *   - net.segmentPerson
+      // *   - net.segmentPersonParts
+      // *   - net.segmentMultiPerson
+      // *   - net.segmentMultiPersonParts
+      // const person = await net.segmentPerson(video);
+      const person = await net.segmentPerson(video, {
+        flipHorizontal: true,
+        internalResolution: "low",
+        segmentationThreshold: 0.5,
+      });
+      console.log(person);
+
+      // const coloredPartImage = bodyPix.toMask(person);
+      const coloredPartImage = bodyPix.toColoredPartMask(person);
+      const opacity = 0.7;
+      const flipHorizontal = false;
+      const maskBlurAmount = 0;
+      const canvas = canvasRef.current;
+
+      // bodyPix.drawMask(
+      //   canvas,
+      //   video,
+      //   coloredPartImage,
+      //   opacity,
+      //   maskBlurAmount,
+      //   flipHorizontal
+      // );
     }
   }
 

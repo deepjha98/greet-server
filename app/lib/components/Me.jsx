@@ -10,6 +10,7 @@ import * as stateActions from "../redux/stateActions";
 import PeerView from "./PeerView";
 import videoAction from "../utils/actionCall";
 import * as bodyPix from "@tensorflow-models/body-pix";
+import * as tf from "@tensorflow/tfjs";
 
 class Me extends React.Component {
   constructor(props) {
@@ -33,14 +34,16 @@ class Me extends React.Component {
     if (this.props.videoProducer) {
       console.log(this.props.videoProducer.track);
       this.options = {
-        multiplier: 0.25,
+        multiplier: 0.5,
         stride: 32,
         quantBytes: 4,
       };
       bodyPix
         .load(this.options)
-        .then(console.log("BODY_PIX_LOADED"))
-        .catch((err) => console.log(err));
+        .then((net) => {
+          console.log("././.././../././././././", net);
+        })
+        .catch((err) => console.log("X-X-X-XX-X-X-X-XX-X-XX", err));
     }
   }
 
@@ -74,7 +77,7 @@ class Me extends React.Component {
       onSetStatsPeerId,
     } = this.props;
 
-    // this.blurBack();
+    this.blurBack();
 
     let micState;
 
