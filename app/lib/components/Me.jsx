@@ -33,13 +33,13 @@ class Me extends React.Component {
     if (this.props.videoProducer) {
       console.log(this.props.videoProducer.track);
       this.options = {
-        multiplier: 0.75,
+        multiplier: 0.25,
         stride: 32,
         quantBytes: 4,
       };
       bodyPix
         .load(this.options)
-        .then((net) => this.perform(net))
+        .then(console.log("BODY_PIX_LOADED"))
         .catch((err) => console.log(err));
     }
   }

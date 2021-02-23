@@ -10,7 +10,9 @@ import Logger from "../Logger";
 import * as appPropTypes from "./appPropTypes";
 import EditableInput from "./EditableInput";
 
-import bodyPix from "@tensorflow-models/body-pix";
+// IMPORTING THE TensorFlow Modules for background effect
+import * as bodyPix from "@tensorflow-models/body-pix";
+// import * as tf from "@tensorflow/tfjs";
 
 const logger = new Logger("PeerView");
 
@@ -22,7 +24,8 @@ const tinyFaceDetectorOptions = new faceapi.TinyFaceDetectorOptions({
 export default class PeerView extends React.Component {
   constructor(props) {
     super(props);
-
+    //canvas Reference
+    this.canvasPerson = React.createRef();
     this.state = {
       audioVolume: 0, // Integer from 0 to 10.,
       showInfo: window.SHOW_INFO || false,
@@ -50,8 +53,43 @@ export default class PeerView extends React.Component {
 
     // requestAnimationFrame for face detection.
     this._faceDetectionRequestAnimationFrame = null;
+    //
+    this.loadBodyPix = this.loadBodyPix.bind(this);
   }
+  //RUNNING THE BLUR EFFECT
+  //------Getting video stream from videoSrc object-----
+  async loadBodyPix() {
+    console.log("====================");
+    this.options = {
+      multiplier: 0.5,
+      stride: 32,
+      quantBytes: 4,
+    };
+    this.net = await bodyPix
+      .load(this.options)
+      .then(console.log(this.net))
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  // perform(net) {
+  //   while (this.state.videoCanPlay && this.state.videoElemPaused === false) {
+  //     const segmentation = net.segmentPerson(video);
+  //     console.log(segmentation);
+  //     const backgroundBlurAmount = 6;
+  //     const edgeBlurAmount = 6;
+  //     const flipHorizontal = true;
 
+  //     bodyPix.drawBokehEffect(
+  //       this.canvasPerson,
+  //       videoElem,
+  //       segmentation,
+  //       backgroundBlurAmount,
+  //       edgeBlurAmount,
+  //       flipHorizontal
+  //     );
+  //   }
+  // }
   render() {
     const {
       isMe,
@@ -92,7 +130,8 @@ export default class PeerView extends React.Component {
       videoElemPaused,
       maxSpatialLayer,
     } = this.state;
-
+    console.log("+++=====+++++++++=======++++++=====+++++++======");
+    this.loadBodyPix();
     return (
       <div data-component="PeerView">
         <div className="info">
@@ -450,9 +489,14 @@ export default class PeerView extends React.Component {
           controls={false}
         />
         <center>
-          <div id="video__blur">
-            <div id="video__blur--background"></div>
-            <canvas id="canvasPerson" width="640" height="480"></canvas>
+          <div id="selfie-container">
+            <div id="background-container"></div>
+            <canvas
+              ref={this.canvasPerson}
+              id="canvasPerson"
+              width="640"
+              height="480"
+            ></canvas>
           </div>
         </center>
 
@@ -560,9 +604,6 @@ export default class PeerView extends React.Component {
 
       stream.addTrack(videoTrack);
       videoElem.srcObject = stream;
-      console.log("HELLO @ 123")
-      await this.loadBodyPix();
-      
 
       videoElem.oncanplay = () => this.setState({ videoCanPlay: true });
 
@@ -572,7 +613,6 @@ export default class PeerView extends React.Component {
         audioElem
           .play()
           .catch((error) => logger.warn("audioElem.play() failed:%o", error));
-        await this.backgoundRemove()
       };
 
       videoElem.onpause = () => this.setState({ videoElemPaused: true });
@@ -586,41 +626,6 @@ export default class PeerView extends React.Component {
       if (faceDetection) this._startFaceDetection();
     } else {
       videoElem.srcObject = null;
-    }
-  }
-
-  //RUNNING THE BLUR EFFECT
-  //------Getting video stream from videoSrc object-----
-  async loadBodyPix() {
-    options = {
-      multiplier: 0.5,
-      stride: 32,
-      quantBytes: 4,
-    };
-    await bodyPix
-      .load(options)
-      .then((net) => perform(net))
-      .catch((err) => console.log(err));
-    console.log("BODY PIX LOADED");
-  }
-
-  async backgoundRemove(videoElemPaused) {
-    while (videoElemPaused === false) {
-      console.log("BACKGROUNDS REMOVE");
-      const segmentation = await net.segmentPerson(video);
-
-      const backgroundBlurAmount = 6;
-      const edgeBlurAmount = 6;
-      const flipHorizontal = true;
-
-      bodyPix.drawBokehEffect(
-        canvas,
-        videoElement,
-        segmentation,
-        backgroundBlurAmount,
-        edgeBlurAmount,
-        flipHorizontal
-      );
     }
   }
 

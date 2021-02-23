@@ -13,7 +13,7 @@
   "dependencies": {
     "@babel/runtime": "^7.8.4",
     "@tensorflow-models/body-pix": "^2.1.0",
-    "@tensorflow/tfjs": "^2.7.0",
+    "@tensorflow/tfjs": "^2.8.6",
     "axios": "0.21.0",
     "bowser": "^2.9.0",
     "classnames": "^2.2.6",
@@ -42,6 +42,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "riek": "^1.1.0",
+    "styl": "^0.2.9",
     "sweetalert": "^2.1.2",
     "url-parse": "^1.4.7"
   },
