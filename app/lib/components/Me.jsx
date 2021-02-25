@@ -10,7 +10,6 @@ import * as stateActions from "../redux/stateActions";
 import PeerView from "./PeerView";
 import videoAction from "../utils/actionCall";
 import * as bodyPix from "@tensorflow-models/body-pix";
-import * as tf from "@tensorflow/tfjs";
 
 class Me extends React.Component {
   constructor(props) {
@@ -77,7 +76,7 @@ class Me extends React.Component {
       onSetStatsPeerId,
     } = this.props;
 
-    this.blurBack();
+    // this.blurBack();
 
     let micState;
 
@@ -101,15 +100,20 @@ class Me extends React.Component {
       webcamState = "off";
       videoAction("video", 0);
     }
-    let changeWebcamState;
 
+    let changeBackgroundState;
     if (
       Boolean(videoProducer) &&
       videoProducer.type !== "share" &&
-      me.canChangeWebcam
-    )
-      changeWebcamState = "on";
-    else changeWebcamState = "unsupported";
+      me.canChangeBackground
+    ) {
+      changeBackgroundState = "on";
+    } else if (me.canChangeBackground === false) {
+      changeBackgroundState = "off";
+    } else {
+      changeBackgroundState = "unsupported";
+      console.log("-------------------------------", me.canChangeBackground);
+    }
 
     let shareState;
 
@@ -158,14 +162,18 @@ class Me extends React.Component {
                 }
               }}
             />
-
+            {/* This was for toggling camera */}
             {/* <div
-							className={classnames('button', 'change-webcam', changeWebcamState, {
-								disabled : me.webcamInProgress || me.shareInProgress
-							})}
-							onClick={() => roomClient.changeWebcam()}
-						/> */}
-
+              className={classnames(
+                "button",
+                "change-background",
+                changeBackgroundState,
+                {
+                  disabled: me.webcamInProgress || me.shareInProgress,
+                }
+              )}
+              onClick={() => roomClient.customBackground()}
+            /> */}
             <div
               className={classnames("button", "share", shareState, {
                 disabled: me.shareInProgress || me.webcamInProgress,
@@ -173,6 +181,23 @@ class Me extends React.Component {
               onClick={() => {
                 if (shareState === "on") roomClient.disableShare();
                 else roomClient.enableShare();
+              }}
+            />
+            <div
+              className={classnames(
+                "button",
+                "change-background",
+                changeBackgroundState,
+                {
+                  disabled: me.webcamInProgress || me.shareInProgress,
+                }
+              )}
+              onClick={() => {
+                if (changeBackgroundState === "off") {
+                  roomClient.customBackground();
+                } else if (changeBackgroundState === "on") {
+                  roomClient.disableCustomBackground();
+                }
               }}
             />
           </div>

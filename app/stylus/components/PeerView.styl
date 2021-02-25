@@ -285,6 +285,7 @@
 		transition-property: opacity;
 		transition-duration: 0.5s;
 		background-color: rgba(#000, 0.75);
+		z-index: 10;
 
 		&.is-me {
 			transform: scaleX(-1);
@@ -299,6 +300,33 @@
 			filter: grayscale(100%) brightness(135%) blur(5px);
 		}
 	}
+
+	> #selfie-container{
+		height: 100%
+   		width: 100%;
+    	top: 0;
+    	left: 0;
+    	position: absolute;
+		> #background-container {
+			position absolute;
+			top :0;
+			left: 0;
+			height: 100%;
+			width: 100%;
+			background-image: url("https://images.unsplash.com/photo-1540762693098-50320eb8a752?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80");
+			background-size: cover;		
+			background-position: center center;
+			background-repeat: no-repeat;		
+			background-color: transparent;
+		}
+		>#canvasPerson{
+			width:100%;
+			height: 100%;
+		}
+		
+	}
+
+
 	> canvas.canvasPerson{
 		position: absolute;
 		right: 10px;

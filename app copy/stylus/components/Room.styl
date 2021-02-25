@@ -1,0 +1,374 @@
+[data-component='Room'] {
+	position: relative;
+	height: 100%;
+	width: 100%;
+
+	AppearFadeIn(300ms);
+
+	> .heading-name {
+		position: fixed;
+		z-index: 100;
+		display: flex;
+		flex-direction: row;
+			user-select: none;
+			pointer-events: none;
+			text-align: center;
+			font-family: 'Roboto';
+			font-weight: 400;
+			color: #ffffff;		
+
+		+desktop() {
+			top: 23px;
+			left: 20px;
+			width: 124px;
+		}
+
+		+mobile() {
+			top: 12px;
+			left: 10px;
+			width: 110px;
+		}
+	}
+
+	> .state {
+		position: fixed;
+		z-index: 100;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		border-radius: 25px;
+		background-color: $COLOR_BG_1;
+
+		+desktop() {
+			top: 20px;
+			right: 20px;
+			width: 124px;
+		}
+
+		+mobile() {
+			top: 10px;
+			right: 10px;
+			width: 110px;
+		}
+
+		> .icon {
+			flex: 0 0 auto;
+			border-radius: 100%;
+
+			+desktop() {
+				margin: 6px;
+				margin-right: 0;
+				height: 16px;
+				width: 16px;
+			}
+
+			+mobile() {
+				margin: 4px;
+				margin-right: 0;
+				height: 16px;
+				width: 16px;
+			}
+
+			&.new, &.closed {
+				background-color: rgba(#aaa, 0.5);
+			}
+
+			&.connecting {
+				animation: Room-info-state-connecting .75s infinite linear;
+			}
+
+			&.connected {
+				background-color: rgba(#30bd18, 0.75);
+
+				+mobile() {
+					display: none;
+				}
+			}
+		}
+
+		> .text {
+			flex: 100 0 auto;
+			user-select: none;
+			pointer-events: none;
+			text-align: center;
+			text-transform: uppercase;
+			font-family: 'Roboto';
+			font-weight: 400;
+			color: rgba(#fff, 0.75);
+
+			+desktop() {
+				font-size: 12px;
+			}
+
+			+mobile() {
+				font-size: 10px;
+			}
+
+			&.connected {
+				+mobile() {
+					display: none;
+				}
+			}
+		}
+	}
+
+	> .room-link-wrapper {
+		pointer-events: none;
+		position: absolute;
+		z-index: 1;
+		top: 16px;
+		left: 74px;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+
+		> .room-link {
+			width: auto;
+			background-color: $COLOR_BG_1;
+			border-radius: 56px;
+			box-shadow: 0px 3px 12px 2px rgba(#111, 0.4);
+
+			> a.link {
+				display: block;;
+				user-select: none;
+				pointer-events: auto;
+				text-transform: uppercase;
+				font-family: 'Roboto';
+				font-weight: 400;
+				color: rgba(#fff, 0.75);
+				cursor: pointer;
+				text-decoration: none;
+				transition-property: color;
+				transition-duration: 0.1s;
+
+				+desktop() {
+					padding: 10px 20px;
+					font-size: 12px;
+				}
+
+				+mobile() {
+					padding: 6px 10px;
+					font-size: 10px;
+				}
+
+				&:hover {
+					color: #fff;
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
+	> .room-close-wrapper {
+                pointer-events: none;
+                position: absolute;
+                z-index: 1;
+                top: 19px;
+                right: 279px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+
+                > .room-close-button {
+                        width: auto;
+                        box-shadow: 0px 3px 12px 2px rgba(#111, 0.4);
+
+                        > a.close-button {
+                                background: darken(#000000, 1.5%);
+                                font-weight: 200;
+                                cursor: pointer;
+                                font-size:16px;
+                                font-weight: 400;
+                                line-height: 10px;
+                                margin: 0 0 2em;
+                                color: #FFFFFF;
+                                max-width: 160px;
+                                position: relative;
+                                text-decoration: none;
+                                text-transform: uppercase;
+                                width: 100%;
+                                display: block;;
+                                user-select: none;
+                                pointer-events: auto;
+                                font-family: 'Roboto';
+
+                                > a.close-svg {
+                                        height: 45px;
+                                        left: 0;
+                                        position: absolute;
+                                        top: 0;
+                                        width: 100%;
+
+                                        > .close-rect {
+                                                fill: none;
+                                                stroke: #fff;
+                                                stroke-width: 2;
+                                                stroke-dasharray: 422, 0;
+                                                transition: all 0.35s linear;
+                                        }
+                                }
+
+                                +desktop() {
+                                        padding: 10px 20px;
+                                        font-size: 12px;
+                                }
+
+                                +mobile() {
+                                        padding: 6px 10px;
+                                        font-size: 10px;
+                                }
+
+                                &:hover {
+                                        color: #fff;
+                                        text-decoration: underline;
+                                }
+
+                                > svg {
+                                        height: 45px;
+                                        left: 0;
+                                        position: absolute;
+                                        top: 0;
+                                        width: 100%;
+                                }
+
+                        }
+                }
+        }
+
+
+	> .me-container {
+		position: fixed;
+		z-index: 100;
+		overflow: hidden;
+		box-shadow: 0px 5px 12px 2px rgba(#111, 0.5);
+		transition-property: border-color;
+		transition-duration: 0.2s;
+
+		&.active-speaker {
+			border-color: #fff;
+		}
+
+		+desktop() {
+			height: 230px;
+			width: 335px;
+			bottom: 60px;
+			left: 20px;
+			border: 1px solid rgba(#fff, 0.15);
+			border-radius: 11px;
+		}
+
+		+mobile() {
+			height: 220px;
+			width: 200px;
+			bottom: 50px;
+			left: 10px;
+			border: 1px solid rgba(#fff, 0.25);
+		}
+	}
+
+	> .chat-input-container {
+		position: fixed;
+		z-index: 100;
+		overflow: hidden;
+		box-shadow: 0px 5px 12px 2px rgba(#111, 0.5);
+
+		+desktop() {
+			height: 31px;
+			width: 334px;
+			bottom: 20px;
+			left: 20px;
+			border: 1px solid rgba(#fff, 0.15);
+			border-radius: 7px;
+		}
+
+		+mobile() {
+			height: 30px;
+			width: 200px;
+			bottom: 10px;
+			left: 10px;
+			border-radius: 7px;
+			border: 1px solid rgba(#fff, 0.25);
+		}
+	}
+
+	> .sidebar {
+		position: fixed;
+		z-index: 101;
+		height: 8px;
+		display: flex;
+		flex-direction: ;
+		justify-content: center;
+		align-items: center;
+
+		+desktop() {
+			right: 208px;
+			width: 36px;
+			margin-top: 0px;
+			top: 30px;
+		}
+
+		+mobile() {
+			bottom: 294px;
+			width: 131px;
+			margin-top: -80px;
+		}
+
+		> .button {
+			flex: 0 0 auto;
+			margin: 4px 4px;
+			background-position: center;
+			background-size: 65%;
+			background-repeat: no-repeat;
+			background-color: $COLOR_BG_1;
+			cursor: pointer;
+			transition-property: opacity, background-color;
+			transition-duration: 0.2s;
+			border-radius: 100%;
+
+			+desktop() {
+				height: 30px;
+				width: 30px;
+			}
+
+			+mobile() {
+				height: 32px;
+				width: 32px;
+			}
+
+			&.on {
+				background-color: rgba(#fff, 0.7);
+			}
+
+			&.disabled {
+				pointer-events: none;
+				opacity: 0.5;
+				transition-duration: 0s;
+			}
+
+			&.hide-videos {
+				background-image: url('/resources/images/icon_video_white_on.svg');
+
+				&.on {
+					background-image: url('/resources/images/icon_video_black_off.svg');
+				}
+			}
+
+			&.mute-audio {
+				background-image: url('/resources/images/icon_volume_white_on.svg');
+
+				&.on {
+					background-image: url('/resources/images/icon_volume_black_off.svg');
+				}
+			}
+
+			&.restart-ice {
+				background-image: url('/resources/images/icon_restart_ice_white.svg');
+			}
+		}
+	}
+}
+
+@keyframes Room-info-state-connecting {
+	50% { background-color: rgba(orange, 0.75); }
+}

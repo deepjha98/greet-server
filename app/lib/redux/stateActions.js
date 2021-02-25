@@ -54,6 +54,14 @@ export const setCanChangeWebcam = (flag) => {
   };
 };
 
+// ACTION FOR CUSTOM BACKGROUND
+export const setCanChangeBackground = (flag) => {
+  return {
+    type: "SET_CAN_CHANGE_BACKGROUND",
+    payload: flag,
+  };
+};
+
 export const setDisplayName = (displayName) => {
   return {
     type: "SET_DISPLAY_NAME",

@@ -5,7 +5,7 @@
 
 	> .controls {
 		position: absolute;
-		z-index: 10;
+		z-index: 1000;
 		top: 5px;
 		left: 9px;
 		display: flex;
@@ -85,13 +85,15 @@
 				}
 			}
 
-			&.change-webcam {
+			&.change-background {
 				&.on {
-					background-image: url('/resources/images/icon_change_webcam_black.svg');
+					background-image: url('/resources/images/icon_info_background_on.svg');
 				}
-
+				&.off {
+					background-image: url('/resources/images/icon_info_background_off.svg');
+				}
 				&.unsupported {
-					background-image: url('/resources/images/icon_change_webcam_white_unsupported.svg');
+					background-image: url('/resources/images/icon_info_background_unsupported.svg');
 				}
 			}
 
