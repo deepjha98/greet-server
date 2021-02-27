@@ -9,7 +9,7 @@ import { withRoomContext } from "../RoomContext";
 import * as stateActions from "../redux/stateActions";
 import PeerView from "./PeerView";
 import videoAction from "../utils/actionCall";
-import * as bodyPix from "@tensorflow-models/body-pix";
+// import * as bodyPix from "@tensorflow-models/body-pix";
 
 class Me extends React.Component {
   constructor(props) {
@@ -23,47 +23,47 @@ class Me extends React.Component {
       quantBytes: 4,
     };
 
-    this.blurBack = this.blurBack.bind(this);
-    this.perform = this.perform.bind(this);
+    // this.blurBack = this.blurBack.bind(this);
+    // this.perform = this.perform.bind(this);
   }
 
-  blurBack() {
-    console.log("In blur");
-    console.log(this.props.videoProducer);
-    if (this.props.videoProducer) {
-      console.log(this.props.videoProducer.track);
-      this.options = {
-        multiplier: 0.5,
-        stride: 32,
-        quantBytes: 4,
-      };
-      bodyPix
-        .load(this.options)
-        .then((net) => {
-          console.log("././.././../././././././", net);
-        })
-        .catch((err) => console.log("X-X-X-XX-X-X-X-XX-X-XX", err));
-    }
-  }
+  // blurBack() {
+  //   console.log("In blur");
+  //   console.log(this.props.videoProducer);
+  //   if (this.props.videoProducer) {
+  //     console.log(this.props.videoProducer.track);
+  //     this.options = {
+  //       multiplier: 0.5,
+  //       stride: 32,
+  //       quantBytes: 4,
+  //     };
+  //     bodyPix
+  //       .load(this.options)
+  //       .then((net) => {
+  //         console.log("././.././../././././././", net);
+  //       })
+  //       .catch((err) => console.log("X-X-X-XX-X-X-X-XX-X-XX", err));
+  //   }
+  // }
 
-  async perform(net) {
-    while (startBtn.disabled && blurBtn.hidden) {
-      const segmentation = await net.segmentPerson(video);
+  // async perform(net) {
+  //   while (startBtn.disabled && blurBtn.hidden) {
+  //     const segmentation = await net.segmentPerson(video);
 
-      const backgroundBlurAmount = 6;
-      const edgeBlurAmount = 6;
-      const flipHorizontal = true;
+  //     const backgroundBlurAmount = 6;
+  //     const edgeBlurAmount = 6;
+  //     const flipHorizontal = true;
 
-      bodyPix.drawBokehEffect(
-        canvas,
-        videoElement,
-        segmentation,
-        backgroundBlurAmount,
-        edgeBlurAmount,
-        flipHorizontal
-      );
-    }
-  }
+  //     bodyPix.drawBokehEffect(
+  //       canvas,
+  //       videoElement,
+  //       segmentation,
+  //       backgroundBlurAmount,
+  //       edgeBlurAmount,
+  //       flipHorizontal
+  //     );
+  //   }
+  // }
 
   render() {
     const {
@@ -110,9 +110,8 @@ class Me extends React.Component {
       changeBackgroundState = "on";
     } else if (me.canChangeBackground === false) {
       changeBackgroundState = "off";
-    } else {
+    } else if (!Boolean(videoProducer) || videoProducer.type === "share") {
       changeBackgroundState = "unsupported";
-      console.log("-------------------------------", me.canChangeBackground);
     }
 
     let shareState;
@@ -229,6 +228,7 @@ class Me extends React.Component {
             roomClient.setMaxSendingSpatialLayer(spatialLayer);
           }}
           onStatsClick={onSetStatsPeerId}
+          canChangeBackground={me.canChangeBackground}
         />
 
         <ReactTooltip

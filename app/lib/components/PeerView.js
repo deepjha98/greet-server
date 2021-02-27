@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import ReactTooltip from "react-tooltip";
 import classnames from "classnames";
@@ -12,6 +12,7 @@ import EditableInput from "./EditableInput";
 
 // IMPORTING THE TensorFlow Modules for background effect
 // import * as tf from "@tensorflow/tfjs";
+// import * as tf from "@tensorflow/tfjs";
 import * as bodyPix from "@tensorflow-models/body-pix";
 
 const logger = new Logger("PeerView");
@@ -20,22 +21,6 @@ const tinyFaceDetectorOptions = new faceapi.TinyFaceDetectorOptions({
   inputSize: 160,
   scoreThreshold: 0.5,
 });
-//RUNNING THE BLUR EFFECT
-//------Getting video stream from videoSrc object-----
-const loadBodyPix = async () => {
-  console.log("====================");
-  const options = {
-    architecture: "MobileNetV1",
-    multiplier: 0.5,
-    stride: 32,
-    quantBytes: 4,
-  };
-  const net = await bodyPix.load(options);
-  console.log("BODY-PIX-LOADED");
-  setInterval(() => {
-    console.log("---------------------------------------", net);
-  }, 10000000);
-};
 
 export default class PeerView extends React.Component {
   constructor(props) {
@@ -50,6 +35,7 @@ export default class PeerView extends React.Component {
       videoCanPlay: false,
       videoElemPaused: false,
       maxSpatialLayer: null,
+      changeBackgroundState: this.props.canChangeBackground,
     };
 
     // Latest received video track.
@@ -108,6 +94,7 @@ export default class PeerView extends React.Component {
       consumerPreferredTemporalLayer,
       consumerPriority,
       audioMuted,
+      canChangeBackground,
       videoVisible,
       videoMultiLayer,
       audioCodec,
@@ -130,9 +117,10 @@ export default class PeerView extends React.Component {
       videoCanPlay,
       videoElemPaused,
       maxSpatialLayer,
+      changeBackgroundState,
     } = this.state;
-
-    loadBodyPix();
+    console.log("******************************", changeBackgroundState);
+    // loadBodyPix();
     return (
       <div data-component="PeerView">
         <div className="info">
@@ -492,11 +480,11 @@ export default class PeerView extends React.Component {
 
         <div id="selfie-container">
           <div id="background-container">
-            <div class="spinner-border d-none" role="status">
-              <span class="sr-only">Loading...</span>
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
             </div>
           </div>
-          <canvas id="canvasPerson"></canvas>
+          <canvas ref="canvasPerson" id="canvasPerson"></canvas>
         </div>
 
         <audio
@@ -530,9 +518,19 @@ export default class PeerView extends React.Component {
   }
 
   componentDidMount() {
-    const { audioTrack, videoTrack } = this.props;
-
+    const { audioTrack, videoTrack, canChangeBackground } = this.props;
+    const { changeBackgroundState } = this.state;
+    this.setState({ changeBackgroundState: canChangeBackground });
     this._setTracks(audioTrack, videoTrack);
+    //   console.log("canChangeBackground", canChangeBackground);
+    // if (canChangeBackground) {
+    //   console.log(canChangeBackground)
+    //   await this._setCustomBackground();
+    // } else {
+    //   console.log(canChangeBackground)
+    //   console.log("canChangeBackground", canChangeBackground);
+    //   return;
+    // }
   }
 
   componentWillUnmount() {
@@ -552,7 +550,6 @@ export default class PeerView extends React.Component {
 
   componentWillUpdate() {
     const { isMe, audioTrack, videoTrack, videoRtpParameters } = this.props;
-
     const { maxSpatialLayer } = this.state;
 
     if (isMe && videoRtpParameters && maxSpatialLayer === null) {
@@ -564,6 +561,7 @@ export default class PeerView extends React.Component {
     }
 
     this._setTracks(audioTrack, videoTrack);
+    //
   }
 
   _setTracks(audioTrack, videoTrack) {
@@ -725,6 +723,34 @@ export default class PeerView extends React.Component {
       videoResolutionHeight: null,
     });
   }
+  // START CUSTOM BACKGROUND
+  async _setCustomBackground() {
+    //RUNNING THE BLUR EFFECT
+    //------Getting video stream from videoSrc object-----
+    const loadBodyPix = async () => {
+      console.log("====================", "BODY-PIX-EVENT FIRED_UP");
+      const options = {
+        architecture: "MobileNetV1",
+        multiplier: 0.5,
+        stride: 32,
+        quantBytes: 4,
+      };
+
+      // console.log("TENSOR-FLOW", tf);
+      const net = await bodyPix
+        .load(options)
+        .then((result) => {
+          console.log("TRUE-TRUE-TRUE-TRUE-TRuE", result);
+        })
+        .catch((err) => {
+          console.log("ERROR-ERROR-ERROR-ERROR-ERROR", err);
+        });
+      console.log("BODY-PIX-LOADED");
+    };
+    await loadBodyPix();
+
+    console.log("////////////////////////////???????");
+  }
 
   _startFaceDetection() {
     const { videoElem, canvas } = this.refs;
@@ -845,6 +871,7 @@ PeerView.propTypes = {
   audioScore: PropTypes.any,
   videoScore: PropTypes.any,
   faceDetection: PropTypes.bool.isRequired,
+  canChangeBackground: PropTypes.bool.isRequired,
   onChangeDisplayName: PropTypes.func,
   onChangeMaxSendingSpatialLayer: PropTypes.func,
   onChangeVideoPreferredLayers: PropTypes.func,
