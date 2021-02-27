@@ -21,7 +21,7 @@ const tinyFaceDetectorOptions = new faceapi.TinyFaceDetectorOptions({
   inputSize: 160,
   scoreThreshold: 0.5,
 });
-
+let canChangeBackgroundVar = false;
 export default class PeerView extends React.Component {
   constructor(props) {
     super(props);
@@ -35,7 +35,7 @@ export default class PeerView extends React.Component {
       videoCanPlay: false,
       videoElemPaused: false,
       maxSpatialLayer: null,
-      changeBackgroundState: this.props.canChangeBackground,
+      changeBackgroundState: canChangeBackgroundVar,
     };
 
     // Latest received video track.
@@ -55,7 +55,7 @@ export default class PeerView extends React.Component {
 
     // requestAnimationFrame for face detection.
     this._faceDetectionRequestAnimationFrame = null;
-    //
+
     // this.loadBodyPix = this.loadBodyPix.bind(this);
   }
 
@@ -77,6 +77,7 @@ export default class PeerView extends React.Component {
   //     );
   //   }
   // }
+
   render() {
     const {
       isMe,
@@ -119,7 +120,10 @@ export default class PeerView extends React.Component {
       maxSpatialLayer,
       changeBackgroundState,
     } = this.state;
-    console.log("******************************", changeBackgroundState);
+    console.log(
+      "123456789///////123456789-------",
+      this._customBackgroundToggle(changeBackgroundState, canChangeBackground)
+    );
     // loadBodyPix();
     return (
       <div data-component="PeerView">
@@ -518,19 +522,9 @@ export default class PeerView extends React.Component {
   }
 
   componentDidMount() {
-    const { audioTrack, videoTrack, canChangeBackground } = this.props;
-    const { changeBackgroundState } = this.state;
-    this.setState({ changeBackgroundState: canChangeBackground });
+    const { audioTrack, videoTrack } = this.props;
+
     this._setTracks(audioTrack, videoTrack);
-    //   console.log("canChangeBackground", canChangeBackground);
-    // if (canChangeBackground) {
-    //   console.log(canChangeBackground)
-    //   await this._setCustomBackground();
-    // } else {
-    //   console.log(canChangeBackground)
-    //   console.log("canChangeBackground", canChangeBackground);
-    //   return;
-    // }
   }
 
   componentWillUnmount() {
@@ -562,6 +556,15 @@ export default class PeerView extends React.Component {
 
     this._setTracks(audioTrack, videoTrack);
     //
+  }
+  _customBackgroundToggle(changeBackgroundState, canChangeBackground) {
+    // For background change detect
+    if (canChangeBackgroundVar === canChangeBackground) {
+      return canChangeBackgroundVar;
+    } else if (canChangeBackgroundVar !== canChangeBackground) {
+      canChangeBackgroundVar = canChangeBackground;
+      return canChangeBackgroundVar;
+    }
   }
 
   _setTracks(audioTrack, videoTrack) {
