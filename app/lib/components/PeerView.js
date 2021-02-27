@@ -120,10 +120,7 @@ export default class PeerView extends React.Component {
       maxSpatialLayer,
       changeBackgroundState,
     } = this.state;
-    console.log(
-      "123456789///////123456789-------",
-      this._customBackgroundToggle(changeBackgroundState, canChangeBackground)
-    );
+    console.log("Custom Backgrund button is : ", this._customBackgroundStart());
     // loadBodyPix();
     return (
       <div data-component="PeerView">
@@ -468,6 +465,7 @@ export default class PeerView extends React.Component {
 
         <video
           ref="videoElem"
+          id="webcam-feed"
           className={classnames({
             "is-me": isMe,
             hidden: !videoVisible || !videoCanPlay,
@@ -488,7 +486,7 @@ export default class PeerView extends React.Component {
               <span className="sr-only">Loading...</span>
             </div>
           </div>
-          <canvas ref="canvasPerson" id="canvasPerson"></canvas>
+          <canvas ref={this.canvasPerson} id="canvasPerson"></canvas>
         </div>
 
         <audio
@@ -556,15 +554,6 @@ export default class PeerView extends React.Component {
 
     this._setTracks(audioTrack, videoTrack);
     //
-  }
-  _customBackgroundToggle(changeBackgroundState, canChangeBackground) {
-    // For background change detect
-    if (canChangeBackgroundVar === canChangeBackground) {
-      return canChangeBackgroundVar;
-    } else if (canChangeBackgroundVar !== canChangeBackground) {
-      canChangeBackgroundVar = canChangeBackground;
-      return canChangeBackgroundVar;
-    }
   }
 
   _setTracks(audioTrack, videoTrack) {
@@ -726,33 +715,85 @@ export default class PeerView extends React.Component {
       videoResolutionHeight: null,
     });
   }
+  // Below function is for checking whether the button is set to true false
+  _customBackgroundToggle(canChangeBackground) {
+    // For background change detect
+    if (canChangeBackgroundVar === canChangeBackground) {
+      return canChangeBackgroundVar;
+    } else if (canChangeBackgroundVar !== canChangeBackground) {
+      canChangeBackgroundVar = canChangeBackground;
+      return canChangeBackgroundVar;
+    }
+  }
+
+  //After checking the customBackgroundButton
+  _customBackgroundStart() {
+    const { changeBackgroundState } = this.state;
+    const { canChangeBackground } = this.props;
+    // Checking whteher the variables are same
+    if (
+      changeBackgroundState ===
+      this._customBackgroundToggle(canChangeBackground)
+    ) {
+      // If same and true we will load body-pix
+      if (changeBackgroundState) {
+        this._setCustomBackground();
+        return true;
+      } else {
+        return false;
+      }
+    } else if (
+      changeBackgroundState !==
+      this._customBackgroundToggle(canChangeBackground)
+    ) {
+      this.setState({ changeBackgroundState: canChangeBackgroundVar });
+      return changeBackgroundState;
+    }
+  }
+
   // START CUSTOM BACKGROUND
-  async _setCustomBackground() {
+  _setCustomBackground() {
     //RUNNING THE BLUR EFFECT
     //------Getting video stream from videoSrc object-----
-    const loadBodyPix = async () => {
-      console.log("====================", "BODY-PIX-EVENT FIRED_UP");
-      const options = {
-        architecture: "MobileNetV1",
-        multiplier: 0.5,
-        stride: 32,
-        quantBytes: 4,
-      };
+    // const loadBodyPix = async () => {
+    //   console.log("====================", "BODY-PIX-EVENT FIRED_UP");
+    //   const options = {
+    //     architecture: "MobileNetV1",
+    //     multiplier: 0.5,
+    //     stride: 32,
+    //     quantBytes: 4,
+    //   };
 
-      // console.log("TENSOR-FLOW", tf);
-      const net = await bodyPix
-        .load(options)
-        .then((result) => {
-          console.log("TRUE-TRUE-TRUE-TRUE-TRuE", result);
-        })
-        .catch((err) => {
-          console.log("ERROR-ERROR-ERROR-ERROR-ERROR", err);
-        });
-      console.log("BODY-PIX-LOADED");
+    //   // console.log("TENSOR-FLOW", tf);
+    //   const net = await bodyPix
+    //     .load(options)
+    //     .then((result) => {
+    //       console.log("TRUE-TRUE-TRUE-TRUE-TRuE", result);
+    //     })
+    //     .catch((err) => {
+    //       console.log("ERROR-ERROR-ERROR-ERROR-ERROR", err);
+    //     });
+    //   console.log("BODY-PIX-LOADED");
+    // };
+    // loadBodyPix();
+    const { videoElem } = this.refs;
+
+    const canvasFront = this.canvasPerson.current;
+    console.log(canvasFront);
+    // TIMER TO ITTERATE
+    const timerCallback = () => {
+      if (canChangeBackgroundVar === false || !videoElem.srcObject.active) {
+        return;
+      }
+      // const context = canvasFront.getContext("2d");
+      console.log("-----------HEIGHT---------", videoElem.videoHeight);
+      console.log("-----------WIDTH---------", videoElem.videoWidth);
+
+      setTimeout(function () {
+        timerCallback();
+      }, 1000);
     };
-    await loadBodyPix();
-
-    console.log("////////////////////////////???????");
+    timerCallback();
   }
 
   _startFaceDetection() {

@@ -154,6 +154,7 @@ class Me extends React.Component {
               onClick={() => {
                 if (webcamState === "on") {
                   cookiesManager.setDevices({ webcamEnabled: false });
+                  roomClient.disableCustomBackground();
                   roomClient.disableWebcam();
                 } else {
                   cookiesManager.setDevices({ webcamEnabled: true });
