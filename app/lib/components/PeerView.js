@@ -22,11 +22,14 @@ const tinyFaceDetectorOptions = new faceapi.TinyFaceDetectorOptions({
   scoreThreshold: 0.5,
 });
 let canChangeBackgroundVar = false;
+let net;
+
 export default class PeerView extends React.Component {
   constructor(props) {
     super(props);
     //canvas Reference
     this.canvasPerson = React.createRef();
+    this.customCanvas = React.createRef();
     this.state = {
       audioVolume: 0, // Integer from 0 to 10.,
       showInfo: window.SHOW_INFO || false,
@@ -479,16 +482,15 @@ export default class PeerView extends React.Component {
           muted
           controls={false}
         />
-
-        <div id="selfie-container">
-          <div id="background-container">
-            <div className="spinner-border" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
+        {/* CHECK WHETHER THE VARIABLE IS CLICKED OR NOT AND IF TRUE THEN SHOW BACKGROUND */}
+        {canChangeBackgroundVar ? (
+          <div id="selfie-container">
+            <canvas ref={this.customCanvas} id="background-container"></canvas>
+            <canvas ref={this.canvasPerson} id="canvasPerson"></canvas>
           </div>
-          <canvas ref={this.canvasPerson} id="canvasPerson"></canvas>
-        </div>
-
+        ) : (
+          ""
+        )}
         <audio
           ref="audioElem"
           autoPlay
@@ -753,39 +755,47 @@ export default class PeerView extends React.Component {
 
   // START CUSTOM BACKGROUND
   _setCustomBackground() {
-    //RUNNING THE BLUR EFFECT
-    //------Getting video stream from videoSrc object-----
-    // const loadBodyPix = async () => {
-    //   console.log("====================", "BODY-PIX-EVENT FIRED_UP");
-    //   const options = {
-    //     architecture: "MobileNetV1",
-    //     multiplier: 0.5,
-    //     stride: 32,
-    //     quantBytes: 4,
-    //   };
+    /*STEPS FOLOWED WHILE USING CUSTOM BACKGROUND:-
+       1. Load the body pix
+       2. Define the canva
+    */
 
-    //   // console.log("TENSOR-FLOW", tf);
-    //   const net = await bodyPix
-    //     .load(options)
-    //     .then((result) => {
-    //       console.log("TRUE-TRUE-TRUE-TRUE-TRuE", result);
-    //     })
-    //     .catch((err) => {
-    //       console.log("ERROR-ERROR-ERROR-ERROR-ERROR", err);
-    //     });
-    //   console.log("BODY-PIX-LOADED");
-    // };
-    // loadBodyPix();
+    // RUNNING THE BLUR EFFECT
+    // ------Getting video stream from videoSrc object-----
+    const loadBodyPix = async () => {
+      console.log("====================", "BODY-PIX-EVENT FIRED_UP");
+      const options = {
+        architecture: "MobileNetV1",
+        multiplier: 0.5,
+        stride: 32,
+        quantBytes: 4,
+      };
+
+      // console.log("TENSOR-FLOW", tf);
+      net = await bodyPix
+        .load(options)
+        .then((result) => {
+          console.log("Body-Pix-Loaded : TRUE-TRUE-TRUE-TRUE-TRuE", result);
+        })
+        .catch((err) => {
+          console.log(
+            "Body-Pix-Failed-To-Load : ERROR-ERROR-ERROR-ERROR-ERROR",
+            err
+          );
+        });
+    };
+    loadBodyPix();
     const { videoElem } = this.refs;
-
     const canvasFront = this.canvasPerson.current;
+
     console.log(canvasFront);
+
     // TIMER TO ITTERATE
     const timerCallback = () => {
       if (canChangeBackgroundVar === false || !videoElem.srcObject.active) {
         return;
       }
-      // const context = canvasFront.getContext("2d");
+      const context = canvasFront.getContext("2d");
       console.log("-----------HEIGHT---------", videoElem.videoHeight);
       console.log("-----------WIDTH---------", videoElem.videoWidth);
 
