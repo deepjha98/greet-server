@@ -5,22 +5,23 @@ import classnames from "classnames";
 import Spinner from "react-spinner";
 import clipboardCopy from "clipboard-copy";
 import hark from "hark";
-import * as faceapi from "face-api.js";
+// import * as tf from "@tensorflow/tfjs";
+// import * as faceapi from "face-api.js";
 import Logger from "../Logger";
 import * as appPropTypes from "./appPropTypes";
 import EditableInput from "./EditableInput";
 
 // IMPORTING THE TensorFlow Modules for background effect
-// import * as tf from "@tensorflow/tfjs";
-// import * as tf from "@tensorflow/tfjs";
+
+import * as tf from "@tensorflow/tfjs;";
 import * as bodyPix from "@tensorflow-models/body-pix";
 
 const logger = new Logger("PeerView");
 
-const tinyFaceDetectorOptions = new faceapi.TinyFaceDetectorOptions({
-  inputSize: 160,
-  scoreThreshold: 0.5,
-});
+// const tinyFaceDetectorOptions = new faceapi.TinyFaceDetectorOptions({
+//   inputSize: 160,
+//   scoreThreshold: 0.5,
+// });
 let canChangeBackgroundVar = false;
 let net;
 
@@ -788,13 +789,17 @@ export default class PeerView extends React.Component {
     const { videoElem } = this.refs;
     const canvasFront = this.canvasPerson.current;
 
-    console.log(canvasFront);
+    console.log("CANVAS-FORNt", canvasFront);
 
     // TIMER TO ITTERATE
     const timerCallback = () => {
       if (canChangeBackgroundVar === false || !videoElem.srcObject.active) {
         return;
       }
+      if (net != null) {
+        this._detectBody();
+      }
+      console.log("Segmentation Not fired...", net);
       const context = canvasFront.getContext("2d");
       console.log("-----------HEIGHT---------", videoElem.videoHeight);
       console.log("-----------WIDTH---------", videoElem.videoWidth);
@@ -805,7 +810,91 @@ export default class PeerView extends React.Component {
     };
     timerCallback();
   }
+  // Detect body segmentation with the body-pix model
+  _detectBody() {
+    console.log("Segmentation Function fired up.....", net);
+    net
+      .segmentPerson(webcamElement, {
+        flipHorizontal: false,
+        internalResolution: "medium",
+        segmentationThreshold: segmentationThreshold,
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .then((personSegmentation) => {
+        if (personSegmentation != null) {
+          this._drawBody(personSegmentation);
+        }
+      });
+    // cameraFrame = requestAnimFrame(detectBody);
+  }
+  // DRAWING BODY ON CANVAS
+  _drawBody(personSegmentation) {
+    const { videoElem } = this.refs;
+    const canvasFront = this.canvasPerson.current;
+    const contextPerson = canvasFront.getContext("2d");
+    if (screenMode == "l") {
+      var canvas = document.createElement("canvas");
+      canvas.width = videoElem.width;
+      canvas.height = videoElem.height;
+      var context = canvas.getContext("2d");
+      context.drawImage(videoElem, 0, 0);
+      var imageData = context.getImageData(
+        0,
+        0,
+        videoElem.width,
+        videoElem.height
+      );
 
+      var pixel = imageData.data;
+      for (var p = 0; p < pixel.length; p += 4) {
+        if (personSegmentation.data[p / 4] == 0) {
+          pixel[p + 3] = 0;
+        }
+      }
+      context.imageSmoothingEnabled = true;
+      context.putImageData(imageData, 0, 0);
+
+      var imageObject = new Image();
+      imageObject.onload = function () {
+        contextPerson.clearRect(0, 0, canvasFront.width, canvasFront.height);
+        contextPerson.imageSmoothingEnabled = true;
+        contextPerson.drawImage(
+          imageObject,
+          0,
+          0,
+          canvasFront.width,
+          canvasFront.height
+        );
+      };
+      imageObject.src = canvas.toDataURL();
+    } else {
+      contextPerson.drawImage(
+        videoElem,
+        0,
+        0,
+        videoElem.width,
+        videoElem.height
+      );
+      var imageData = contextPerson.getImageData(
+        0,
+        0,
+        videoElem.width,
+        videoElem.height
+      );
+      var pixel = imageData.data;
+      for (var p = 0; p < pixel.length; p += 4) {
+        if (personSegmentation.data[p / 4] == 0) {
+          pixel[p + 3] = 0;
+        }
+      }
+      contextPerson.imageSmoothingEnabled = true;
+      contextPerson.putImageData(imageData, 0, 0);
+    }
+  }
+
+  //---------End-Of-Custom-Background------
   _startFaceDetection() {
     const { videoElem, canvas } = this.refs;
 
